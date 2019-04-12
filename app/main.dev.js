@@ -68,9 +68,19 @@ app.on('ready', async () => {
   }
 
   mainWindow = new BrowserWindow({
-    // show: false,
+    show: true,
     width: 1024,
     height: 728
+  });
+
+  mainWindow = new BrowserWindow({ width: 1024, height: 768 });
+  mainWindow.loadURL('your url');
+  mainWindow.webContents.openDevTools();
+  mainWindow.webContents.on('devtools-opened', () => {
+      setImmediate(() => {
+          // do whatever you want to do after dev tool completely opened here
+          mainWindow.focus();
+      });
   });
 
   mainWindow.loadURL(`file://${__dirname}/app.html`);
