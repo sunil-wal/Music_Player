@@ -31,4 +31,4 @@ function login(username, password) {
 
 function logout() {}
 
-function signup() {}
+function register() {}
