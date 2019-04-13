@@ -1,15 +1,7 @@
-// @flow
-import * as React from 'react';
+import { connect } from "react-redux";
+import App from '../App'
 
-type Props = {
-  children: React.Node
-};
-
-export default class App extends React.Component<Props> {
-  props: Props;
-
-  render() {
-    const { children } = this.props;
-    return <React.Fragment>{children}</React.Fragment>;
-  }
-}
+const mapStateToProps = state => ({
+    isLoggedIn: false
+})
+export default connect(mapStateToProps)(App)

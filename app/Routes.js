@@ -1,19 +1,37 @@
-import React from 'react';
-import { Switch, Route } from 'react-router';
+import React, { Component } from "react";
+import {
+    Redirect,
+    Switch,
+    Route,
+    withRouter
+} from 'react-router-dom';
 import routes from './constants/routes';
-import App from './containers/App';
 import HomePage from './containers/HomePage';
 import LoginPage from './components/Login';
 import CounterPage from './containers/CounterPage';
 import RegisterPage from './containers/RegisterPage';
 
-export default () => (
-  <App>
-    <Switch>
-      <Route path={routes.COUNTER} component={CounterPage} />
-      <Route path={routes.HOME} component={HomePage} />
-      <Route path={routes.REGISTER} component={RegisterPage} />
-      <Route path={routes.LOGIN} component={LoginPage} />
-    </Switch>
-  </App>
-);
+class Routes extends Component {
+
+  render () {
+      const isLoggedIn = this.props.isLoggedIn
+      return (
+              <Switch>
+                  <Route exact path="/" component = { LoginPage } />
+                  <Route render = {(props) => <React.Fragment>
+                          {isLoggedIn ? null : <Redirect to='/' />}
+                          <div className="primary-navigation-content">
+                              <Switch>
+                              <Route path={routes.COUNTER} component={CounterPage} />
+                              <Route path={routes.HOME} component={HomePage} />
+                              <Route path={routes.REGISTER} component={RegisterPage} />
+                              <Route path={routes.LOGIN} component={LoginPage} />
+                              </Switch>
+                          </div>
+                      </React.Fragment>} />
+              </Switch>
+      )
+  }
+}
+
+export default withRouter(Routes)
