@@ -72,5 +72,5 @@ function mapStateToProps(state) {
     loggingIn
   };
 }
-// export default connect(mapStateToProps)(LoginPage);
-export default LoginPage;
+export default connect()(LoginPage);
+// export default LoginPage;
