@@ -29,7 +29,10 @@ function login(username, password) {
   }
 }
 
-function logout() {}
+function logout() {
+    userService.logout();
+    return { type: userConstants.LOGOUT };
+}
 
 function register(user) {
 
@@ -38,7 +41,7 @@ function register(user) {
 
     userService.register(user)
         .then(
-            user => { 
+            user => {
                 dispatch(success());
                 history.push('/login');
                 dispatch(alertActions.success('Registration successful'));
