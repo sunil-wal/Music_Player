@@ -24,7 +24,7 @@ class Track extends React.Component{
             </div>
         );
     }
-}
+} 
 
 export default Track;
 
