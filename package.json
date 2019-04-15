@@ -271,6 +271,7 @@
     "react-router": "^5.0.0",
     "react-router-dom": "^5.0.0",
     "redux": "^4.0.1",
+    "redux-devtools-extension": "^2.13.8",
     "redux-thunk": "^2.3.0",
     "source-map-support": "^0.5.11"
   },
@@ -283,7 +284,5 @@
     "url": "https://opencollective.com/electron-react-boilerplate-594"
   },
   "browserslist": "electron 1.6",
-  "husky": {
-    
-  }
+  "husky": {}
 }
