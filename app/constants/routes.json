@@ -1,8 +1,8 @@
 {
-  "HOME": "/random",
+  "HOME": "/",
   "COUNTER": "/counter",
   "REGISTER": "/register",
-  "LOGIN": "/",
+  "LOGIN": "/login",
   "TRACK":"/track"
 
 }
