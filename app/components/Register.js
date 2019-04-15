@@ -41,14 +41,16 @@ class Register extends React.Component{
     }
 
     handleSubmit(event) {
+
         event.preventDefault();
+        dispatch(userActions.register(user));
         console.log('submit');
 
         //this.setState({ submitted: true });
         const { user } = this.state;
         const { dispatch } = this.props;
-        if (user.firstName && user.lastName && user.username && user.password) {
-            dispatch(userActions.register(user));
+        if (user.username && user.password) {
+            
         }
     }
 
