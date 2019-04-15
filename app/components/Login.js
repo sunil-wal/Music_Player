@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { userActions } from '../actions';
 
@@ -33,6 +33,7 @@ class LoginPage extends React.Component {
     const { username, password } = this.state;
     return (
       <div className="col-md-6 col-md-offset-3">
+        {(this.props.isLoggedIn) ? <Redirect to={{pathname:'/home'}}/> : null}
         <h2>Login</h2>
         <form name="form" onSubmit={this.handleSubmit}>
           <div>
@@ -67,10 +68,10 @@ class LoginPage extends React.Component {
   }
 }
 function mapStateToProps(state) {
-  const { loggingIn } = state.authentication;
+  const { isLoggedIn } = state.authentication;
   return {
-    loggingIn
+    isLoggedIn
   };
 }
-export default connect()(LoginPage);
+export default connect(mapStateToProps)(LoginPage);
 // export default LoginPage;

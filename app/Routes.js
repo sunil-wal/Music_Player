@@ -6,11 +6,12 @@ import {
     withRouter
 } from 'react-router-dom';
 import routes from './constants/routes';
-import HomePage from './containers/HomePage';
+import { HomePage } from './components/HomePage';
 import LoginPage from './components/Login';
 import CounterPage from './containers/CounterPage';
 import RegisterPage from './containers/RegisterPage';
 // {isLoggedIn ? null : <Redirect to={routes.HOME} />}
+// <Route path={routes.HOME} component={HomePage} />
 class Routes extends Component {
 
   render () {
@@ -18,14 +19,13 @@ class Routes extends Component {
       return (
               <Switch>
                   <Route exact path={routes.LOGIN} component = { LoginPage } />
+                  <Route path={routes.REGISTER} component={RegisterPage} />
                   <Route render = {(props) => <React.Fragment>
-
+                    {isLoggedIn ? null : <Redirect to={routes.LOGIN} />}
+                      <HomePage />
                           <div className="primary-navigation-content">
                               <Switch>
                               <Route path={routes.COUNTER} component={CounterPage} />
-                              <Route path={routes.HOME} component={HomePage} />
-                              <Route path={routes.REGISTER} component={RegisterPage} />
-                              <Route path={routes.LOGIN} component={LoginPage} />
                               </Switch>
                           </div>
                       </React.Fragment>} />

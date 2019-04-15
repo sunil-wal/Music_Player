@@ -1,21 +1,50 @@
 import { userConstants } from '../constants';
 
+const artistNames = ['arijit', 'sonu', 'neha', 'bapi', 'justin', 'rihana', 'linkin'];
+const albumNames = ['kalank', 'kesari', 'gullyboy', 'simmba'];
+const tracks = ['Old Town Road', 'Sunflower', '7 Rings', 'Wow'];
+const plyalists = ['myfev', 'sunilfev', 'everyonesfev'];
+
 let user = JSON.parse(localStorage.getItem('user'));
-const initialState = user ? { loggedIn: true, user } : {};
+const initialState = user ? { loggedIn: true, user} : {};
+
+const musicData = {
+  artistNames,
+  albumNames,
+  tracks,
+  plyalists
+}
 
 export function authentication(state = initialState, action) {
   switch (action.type) {
+    case userConstants.LOGIN_REQUEST:
+      return {
+        ...musicData,
+        isLoggedIn: false,
+        user: action.user
+      };
     case userConstants.LOGIN_SUCCESS:
       return {
-        loggedIn: true,
+        ...musicData,
+        isLoggedIn: true,
         user: action.user
       };
     case userConstants.LOGIN_FAILURE:
-      return {};
+      return {
+        ...musicData,
+        isLoggedIn: true,
+      };
     case userConstants.LOGOUT:
-      return {};
+      return {
+        ...musicData,
+        isLoggedIn: false,
+      };
     default:
-      return state
+      return {
+        ...state,
+        ...musicData,
+        isLoggedIn: false,
+      }
   }
 }
 
