@@ -2,6 +2,7 @@ import React from 'react';
 import { Link, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { userActions } from '../actions';
+import { Button } from 'reactstrap';
 
 class LoginPage extends React.Component {
   constructor(props) {
@@ -57,7 +58,7 @@ class LoginPage extends React.Component {
             />
           </div>
           <div>
-            <button className="btn btn-primary">Login</button>
+            <Button color="primary">Login</Button>{' '}
             <Link to="/register" className="btn btn-link">
               Register
             </Link>
