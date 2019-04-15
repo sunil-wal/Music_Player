@@ -57,5 +57,5 @@ function register(user) {
       body: JSON.stringify(user)
   };
 
-  return fetch(`${config.apiUrl}/users/register`, requestOptions).then(handleResponse);
+  return fetch(`http://192.168.0.99:4001/api/v1/signup`, requestOptions).then(handleResponse);
 }

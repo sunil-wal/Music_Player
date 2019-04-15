@@ -10,11 +10,9 @@ import * as RegisterActions from '../actions/register';
 //       registering
 //   };
 //   }
-  
+
   function mapDispatchToProps(dispatch) {
     return bindActionCreators(RegisterActions, dispatch);
   }
-  
-  export default connect(
-    mapDispatchToProps
-  )(Register);
+
+  export default connect()(Register);
