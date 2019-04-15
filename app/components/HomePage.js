@@ -8,11 +8,12 @@ function ListItem(props) {
     return <li>{props.value}</li>;
   }
 
+
 function DataList(props) {
     const names = props.names;
     const listItems = names.map((name, index) =>
       <ListItem key={name + index}
-                value={name} />
+                value={name}/>
 
     );
     return (

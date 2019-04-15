@@ -2,6 +2,8 @@ import React from 'react';
 import { Link, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { userActions } from '../actions';
+import Routes from '../Routes';
+import routes from '../constants/routes';
 
 class LoginPage extends React.Component {
   constructor(props) {
@@ -37,7 +39,7 @@ class LoginPage extends React.Component {
         <h2>Login</h2>
         <form name="form" onSubmit={this.handleSubmit}>
           <div>
-            <label hasFor="username">Username</label>
+            <label hasfor="username">Username</label>
             <input
               type="text"
               name="username"
@@ -47,7 +49,7 @@ class LoginPage extends React.Component {
             />
           </div>
           <div>
-            <label hasFor="password">Password</label>
+            <label hasfor="password">Password</label>
             <input
               type="password"
               name="password"
@@ -57,7 +59,7 @@ class LoginPage extends React.Component {
             />
           </div>
           <div>
-            <button className="btn btn-primary">Login</button>
+            <button className="btn btn-primary"><Link to={routes.HOME}>Login</Link></button>
             <Link to="/register" className="btn btn-link">
               Register
             </Link>
