@@ -1,4 +1,8 @@
 {
   "HOME": "/",
-  "COUNTER": "/counter"
+  "COUNTER": "/counter",
+  "NEW_ALBUM": "/new-album",
+  "NEW_ARTIST": "/new-artist",
+  "NEW_TRACK": "/new-track",
+  "PLAYLISTS": "/playlists"
 }

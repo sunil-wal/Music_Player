@@ -13,7 +13,11 @@ export default class Home extends Component<Props> {
     return (
       <div className={styles.container} data-tid="container">
         <h2>Home</h2>
-        <Link to={routes.COUNTER}>to Counter</Link>
+        <Link to={routes.NEW_ALBUM}>New Album</Link>
+        <Link to={routes.NEW_ARTIST}>New Artist</Link>
+        <Link to={routes.NEW_TRACK}>New Track</Link>
+        <Link to={routes.NEW_TRACK}>New Track</Link>
+        <Link to={routes.PLAYLISTS}>Playlists</Link>
       </div>
     );
   }
