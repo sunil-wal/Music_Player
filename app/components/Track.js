@@ -3,28 +3,54 @@ import { Link } from 'react-router-dom';
 import routes from '../constants/routes';
 import { userActions }  from '../actions/user.actions';
 
-class Track extends React.Component{
+var newData = {
+    data: 'Track Details',
+    artistName: 'John Doe',
+    genre: 'pop',
+    album: 'shapes',
+    length:'5:03'
+ }
 
-    render(){
-        return(
-            <div className="container-fluid">
-                <div className="row">
-                    <div className="col-md-12">
-                        <h2>TRACK NAME</h2>
-                        <hr/>
-                        <div className="row">
-                         <div className="col-md-3">Album name: </div>
-                         <div className="col-md-3">Artist:</div>
-                         <div className="col-md-3">Genre:</div>
-                         <div className="col-md-3">Duration: </div>
-                        </div>                        
 
-                    </div>
-                </div>
-            </div>
-        );
+ var DataList = ComposedComponent => class extends React.Component {
+    componentDidMount() {
+       this.setState({
+          data: newData.data,
+          artistName: newData.artistName,
+          genre: newData.genre,
+          album: newData.album,
+          length: newData.length
+       });
     }
-} 
+    render() {
+       return <ComposedComponent {...this.props} {...this.state} />;
+    }
+ };
 
-export default Track;
+  class Tracks extends React.Component {
+    render() {
+        return (
+           <div className="container">
+              <div className="row">
+                 <h1>{this.props.data}</h1>
+                 <hr/>
+                 <ul>
+                     <li>{this.props.artistName}</li>
+                     <li>{this.props.genre}</li>
+                     <li>{this.props.album}</li>
+                     <li>{this.props.length}</li>
+                </ul>
+
+              </div>
+           </div>
+        )
+     }
+  }
+
+export default DataList(Tracks);
+
+
+
+
+
 

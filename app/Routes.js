@@ -15,7 +15,7 @@ import Track from './components/Track';
 // <Route path={routes.HOME} component={HomePage} />
 class Routes extends Component {
 
-    
+
   render () {
       const isLoggedIn = this.props.isLoggedIn
       return (
