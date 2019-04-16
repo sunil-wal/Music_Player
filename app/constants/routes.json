@@ -1,6 +1,8 @@
 {
-  "HOME": "/",
+  "HOME": "/home",
   "COUNTER": "/counter",
+  "REGISTER": "/register",
+  "LOGIN": "/",
   "NEW_ALBUM": "/new-album",
   "NEW_ARTIST": "/new-artist",
   "NEW_TRACK": "/new-track",

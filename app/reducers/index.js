@@ -1,19 +1,21 @@
 // @flow
 import { combineReducers } from 'redux';
-import { connectRouter } from 'connected-react-router';
 import counter from './counter';
+import register from './register';
+import { authentication } from './authentication.reducer';
 import playlists from './playlist';
 import album from './album';
 import artist from './artist';
 import track from './track';
 
-export default function createRootReducer(history: History) {
-  return combineReducers<{}, *>({
-    router: connectRouter(history),
-    counter,
-    playlists,
-    album,
-    artist,
-    track
-  });
-}
+const rootReducer = combineReducers({
+  counter,
+  register,
+  authentication,
+  playlists,
+  album,
+  artist,
+  track
+});
+
+export default rootReducer;
