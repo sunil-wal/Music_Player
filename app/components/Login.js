@@ -58,7 +58,7 @@ class LoginPage extends React.Component {
             />
           </div>
           <div>
-            <Button color="primary">Login</Button>{' '}
+            <Button color="primary">Login</Button>
             <Link to="/register" className="btn btn-link">
               Register
             </Link>
