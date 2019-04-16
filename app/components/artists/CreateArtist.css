@@ -1,0 +1,9 @@
+.newArtistContainer {
+  margin: 0 auto;
+  width: 300px;
+  padding-top: 100px;
+}
+
+.newArtistTitle {
+  margin-bottom: 2rem;
+}

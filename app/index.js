@@ -1,5 +1,5 @@
 import React from 'react';
-import {render} from 'react-dom';
+import { render } from 'react-dom';
 import App from './containers/App';
 import { Provider } from 'react-redux';
 import store from './store/configureStore';
@@ -11,7 +11,7 @@ if (module.hot) {
 
 render(
   <Provider store={store}>
-    <App/>
-  </Provider>
-  , document.getElementById('root')
+    <App />
+  </Provider>,
+  document.getElementById('root')
 );

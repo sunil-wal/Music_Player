@@ -1,0 +1,9 @@
+.newAlbumContainer {
+  margin: 0 auto;
+  width: 300px;
+  padding-top: 100px;
+}
+
+.newAlbumTitle {
+  margin-bottom: 2rem;
+}
