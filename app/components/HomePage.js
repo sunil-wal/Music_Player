@@ -7,17 +7,12 @@ import {
   Nav,
   NavItem,
   NavLink,
-  Card,
   Button,
-  CardTitle,
-  CardText,
   Row,
   Col,
+  Input,
   ListGroup,
-  ListGroupItem,
-  Pagination,
-  PaginationItem,
-  PaginationLink
+  ListGroupItem
 } from 'reactstrap';
 import classnames from 'classnames';
 import { userActions } from '../actions';
@@ -50,9 +45,11 @@ class HomePage extends React.Component {
     this.handleToggle = this.handleToggle.bind(this);
     this.handleLogout = this.handleLogout.bind(this);
     this.handlePageChange = this.handlePageChange.bind(this);
+    this.handleSearch = this.handleSearch.bind(this);
     this.state = {
       activeTab: '1',
-      currentPage: 0
+      currentPage: 0,
+      searchText: ''
     };
   }
   handleToggle(tab) {
@@ -72,17 +69,29 @@ class HomePage extends React.Component {
       currentPage: index
     });
   }
+  handleSearch(event) {
+    this.setState({
+      searchText: event.target.value
+    });
+  }
 
   render() {
     const { authentication } = this.props;
     return (
       <div>
-      <div className="text-right">
+        <div className="text-right">
           <Button color="primary" onClick={this.handleLogout}>
             Logout
           </Button>
         </div>
-        <div />
+        <div>
+          <Input
+            type="text"
+            placeholder="Search..."
+            value={this.state.searchText}
+            onChange={this.handleSearch}
+          />
+        </div>
         <Nav tabs>
           <NavItem>
             <NavLink
@@ -91,7 +100,7 @@ class HomePage extends React.Component {
                 this.handleToggle('1');
               }}
             >
-              Airtist
+              Artist
             </NavLink>
           </NavItem>
           <NavItem>
@@ -129,9 +138,13 @@ class HomePage extends React.Component {
           <TabPane tabId="1">
             <Row>
               <Col sm="12">
-                <div className="text-right">
-                  <Button color="primary">Add Artist</Button>
-                </div>
+                {authentication.isAdmin ? (
+                  <div className="text-right">
+                    <Button color="primary">Add Artist</Button>
+                  </div>
+                ) : (
+                  ''
+                )}
                 <DataList names={authentication.artistNames} />
               </Col>
             </Row>
@@ -139,9 +152,13 @@ class HomePage extends React.Component {
           <TabPane tabId="2">
             <Row>
               <Col sm="12">
-                <div className="text-right">
-                  <Button color="primary">Add Album</Button>
-                </div>
+                {authentication.isAdmin ? (
+                  <div className="text-right">
+                    <Button color="primary">Add Album</Button>
+                  </div>
+                ) : (
+                  ''
+                )}
                 <DataList names={authentication.albumNames} />
               </Col>
             </Row>
@@ -149,9 +166,13 @@ class HomePage extends React.Component {
           <TabPane tabId="3">
             <Row>
               <Col sm="12">
-                <div className="text-right">
-                  <Button color="primary">Add Track</Button>
-                </div>
+                {authentication.isAdmin ? (
+                  <div className="text-right">
+                    <Button color="primary">Add Track</Button>
+                  </div>
+                ) : (
+                  ''
+                )}
                 <DataList names={authentication.tracks} />
               </Col>
             </Row>
@@ -159,9 +180,13 @@ class HomePage extends React.Component {
           <TabPane tabId="4">
             <Row>
               <Col sm="12">
-                <div className="text-right">
-                  <Button color="primary">Add Playlist</Button>
-                </div>
+                {authentication.isAdmin ? (
+                  <div className="text-right">
+                    <Button color="primary">Add Playlist</Button>
+                  </div>
+                ) : (
+                  ''
+                )}
                 <DataList names={authentication.plyalists} />
               </Col>
             </Row>
