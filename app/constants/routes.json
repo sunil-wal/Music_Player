@@ -2,6 +2,10 @@
   "HOME": "/",
   "COUNTER": "/counter",
   "REGISTER": "/register",
-  "LOGIN": "/login",
+  "LOGIN": "/",
+  "NEW_ALBUM": "/new-album",
+  "NEW_ARTIST": "/new-artist",
+  "NEW_TRACK": "/new-track",
+  "PLAYLISTS": "/playlists",
   "TRACK":"/track"
 }

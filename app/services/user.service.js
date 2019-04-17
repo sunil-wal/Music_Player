@@ -14,7 +14,10 @@ function login(username, password) {
     body: JSON.stringify({ email: username, password })
   };
 
-  return fetch('http://192.168.0.99:4001/api/v1/login', requestOptions)
+  return fetch(
+    'https://musicplayer-api-wal.herokuapp.com/api/v1/login',
+    requestOptions
+  )
     .then(handleResponse)
     .then(user => {
       // store user details and jwt token in local storage to keep user logged in between page refreshes
@@ -28,34 +31,33 @@ function logout() {
   localStorage.removeItem('user');
 }
 
-
 function handleResponse(response) {
   console.log(response);
   return response.text().then(text => {
-      const data = text && JSON.parse(text);
-      if (!response.ok) {
-          if (response.status === 401) {
-              // auto logout if 401 response returned from api
-              logout();
-              location.reload(true);
-          }
-
-          const error = (data && data.message) || response.statusText;
-          return Promise.reject(error);
+    const data = text && JSON.parse(text);
+    if (!response.ok) {
+      if (response.status === 401) {
+        // auto logout if 401 response returned from api
+        logout();
+        location.reload(true);
       }
 
-      return data;
+      const error = (data && data.message) || response.statusText;
+      return Promise.reject(error);
+    }
+
+    return data;
   });
 }
 
-
-
 function register(user) {
   const requestOptions = {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(user)
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(user)
   };
 
-  return fetch(`http://192.168.0.99:4001/api/v1/signup`, requestOptions).then(handleResponse);
+  return fetch(`https://musicplayer-api-wal.herokuapp.com/api/v1/signup`, requestOptions).then(
+    handleResponse
+  );
 }

@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import styles from './Register.css';
 import routes from '../constants/routes';
-import { userActions }  from '../actions/user.actions'
+import { userActions } from '../actions/user.actions';
 import {
   Button,
   InputGroup,
@@ -157,7 +157,7 @@ class Register extends React.Component {
 }
 
 function mapStateToProps(state) {
-  const { registering } = state.registration;
+  const { registering } = state.register;
   return {
     registering
   };

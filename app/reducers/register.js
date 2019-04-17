@@ -3,8 +3,7 @@
 import type { Action } from './types';
 import { userConstants } from '../constants';
 
-export default function registration(state: {} = {}, action) {
-  console.log('akjshdkas');
+export default function register(state: {} = {}, action) {
   switch (action.type) {
     case userConstants.REGISTER_REQUEST:
       return { registering: true };
