@@ -1,6 +1,7 @@
 import { userConstants } from '../constants';
 import { userService } from '../services';
 import { history } from '../helpers';
+import * as axios from 'axios';
 
 export const userActions = {
   login,

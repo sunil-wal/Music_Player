@@ -54,9 +54,7 @@ export function authentication(state = initialState, action) {
     default:
       return {
         ...state,
-        ...musicData,
-        isAdmin: false,
-        isLoggedIn: false
+        ...musicData
       };
   }
 }

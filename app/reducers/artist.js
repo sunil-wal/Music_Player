@@ -16,7 +16,21 @@ const artist = (state = {}, action) => {
       return {
         ...state
       };
+    case ARTIST.SUCCESS:
+      const { rows } = action.artist;
 
+      return {
+        ...state,
+        allArtist: rows.map(data => data.name)
+      };
+
+    case ARTIST.ERROR:
+      const errorMessage = action.message;
+
+      return {
+        ...state,
+        message: errorMessage
+      };
     default:
       return state;
   }

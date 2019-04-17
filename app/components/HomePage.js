@@ -18,12 +18,13 @@ import {
 import classnames from 'classnames';
 import { userActions } from '../actions';
 import DataPagination from './DataPagination';
+import { getArtist } from '../actions/artist';
 
 function DataList(props) {
   const names = props.names;
-  const listItems = names.map((name, index) => (
-    <ListGroupItem key={name + index}>{name}</ListGroupItem>
-  ));
+  const listItems = names.map((name, index) => {
+    return <ListGroupItem key={name + index}>{name}</ListGroupItem>;
+  });
   return (
     <div>
       <ListGroup>{listItems}</ListGroup>
@@ -53,6 +54,9 @@ class HomePage extends React.Component {
       searchText: ''
     };
   }
+  componentDidMount() {
+    this.props.dispatch(getArtist());
+  }
   handleToggle(tab) {
     if (this.state.activeTab !== tab) {
       this.setState({
@@ -77,7 +81,7 @@ class HomePage extends React.Component {
   }
 
   render() {
-    const { authentication } = this.props;
+    const { authentication, allArtist } = this.props;
     return (
       <div>
         <div className="text-right">
@@ -146,7 +150,7 @@ class HomePage extends React.Component {
                 ) : (
                   ''
                 )}
-                <DataList names={authentication.artistNames} />
+                {allArtist ? <DataList names={allArtist} /> : ''}
               </Col>
             </Row>
           </TabPane>
@@ -184,7 +188,7 @@ class HomePage extends React.Component {
                 {authentication.isAdmin ? (
                   <div className="text-right">
                     <Link to={routes.NEW_PLAYLIST} className="btn btn-link">
-                     <Button color="primary">Add Playlist</Button>
+                      <Button color="primary">Add Playlist</Button>
                     </Link>
                   </div>
                 ) : (
@@ -200,9 +204,10 @@ class HomePage extends React.Component {
   }
 }
 function mapStateToProps(state) {
-  const { authentication } = state;
+  const { authentication, artist } = state;
   return {
-    authentication
+    authentication,
+    allArtist: artist.allArtist
   };
 }
 
