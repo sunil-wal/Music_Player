@@ -10841,6 +10841,11 @@ react-router@5.0.0, react-router@^5.0.0:
     tiny-invariant "^1.0.2"
     tiny-warning "^1.0.0"
 
+react-svg-piechart@^2.4.0:
+  version "2.4.0"
+  resolved "https://registry.yarnpkg.com/react-svg-piechart/-/react-svg-piechart-2.4.0.tgz#93e1e2196fee6b664d7435ed9411a7f196334c2c"
+  integrity sha512-IXqvZCxTuiipwPgROyHi6TihR9PVaGDSnqd14Q2NUXx2PzbNnNcW2nVwLOPLUZm3xEVPzaQhBwxrwrsGLh1uDQ==
+
 react-test-renderer@^16.0.0-0, react-test-renderer@^16.8.6:
   version "16.8.6"
   resolved "https://registry.yarnpkg.com/react-test-renderer/-/react-test-renderer-16.8.6.tgz#188d8029b8c39c786f998aa3efd3ffe7642d5ba1"
