@@ -1,5 +1,5 @@
 {
-  "HOME": "/",
+  "HOME": "/home",
   "COUNTER": "/counter",
   "REGISTER": "/register",
   "LOGIN": "/",
@@ -8,5 +8,5 @@
   "NEW_PLAYLIST": "/new-playlist",
   "NEW_TRACK": "/new-track",
   "PLAYLISTS": "/playlists",
-  "TRACK":"/track"
+  "TRACK": "/track"
 }

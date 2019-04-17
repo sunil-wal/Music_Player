@@ -11,7 +11,7 @@ const artistNames = [
 ];
 const albumNames = ['kalank', 'kesari', 'gullyboy', 'simmba'];
 const tracks = ['Old Town Road', 'Sunflower', '7 Rings', 'Wow'];
-const plyalists = ['myfev', 'sunilfev', 'everyonesfev'];
+const playlists = ['myfev', 'sunilfev', 'everyonesfev'];
 let addButton = false;
 
 let user = JSON.parse(localStorage.getItem('user'));
@@ -21,7 +21,7 @@ const musicData = {
   artistNames,
   albumNames,
   tracks,
-  plyalists,
+  playlists,
   addButton
 };
 
@@ -56,9 +56,7 @@ export function authentication(state = initialState, action) {
     default:
       return {
         ...state,
-        ...musicData,
-        isAdmin: false,
-        isLoggedIn: false
+        ...musicData
       };
   }
 }
