@@ -1,18 +1,17 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
+import routes from '../constants/routes';
 import {
   TabContent,
   TabPane,
   Nav,
   NavItem,
   NavLink,
-  Card,
   Button,
-  CardTitle,
-  CardText,
   Row,
   Col,
+  Input,
   ListGroup,
   ListGroupItem
 } from 'reactstrap';
@@ -39,49 +38,80 @@ class HomePage extends React.Component {
   constructor(props) {
     super(props);
 
-    this.toggle = this.toggle.bind(this);
-    this.logoutFun = this.logoutFun.bind(this);
+    this.dataSet = [...Array(Math.ceil(Math.random() * 10))].map(
+      (a, i) => 'Record ' + (i + 1)
+    );
+
+    this.pageSize = 3;
+    this.pagesCount = Math.ceil(this.dataSet.length / this.pageSize);
+
+    this.handleToggle = this.handleToggle.bind(this);
+    this.handleLogout = this.handleLogout.bind(this);
+    this.handlePageChange = this.handlePageChange.bind(this);
+    this.handleSearch = this.handleSearch.bind(this);
     this.state = {
-      activeTab: '1'
-      //addButton: false
+      activeTab: '1',
+      currentPage: 0,
+      searchText: ''
     };
   }
-  toggle(tab) {
+
+  handleToggle(tab) {
     if (this.state.activeTab !== tab) {
       this.setState({
         activeTab: tab
       });
     }
   }
-  logoutFun() {
+  handleLogout() {
     this.props.dispatch(userActions.logout());
+  }
+  handlePageChange(e, index) {
+    e.preventDefault();
+
+    this.setState({
+      currentPage: index
+    });
+  }
+  handleSearch(event) {
+    this.setState({
+      searchText: event.target.value
+    });
   }
 
   render() {
     const { authentication } = this.props;
     return (
       <div>
-        <p>
-          <Button color="primary" onClick={this.logoutFun}>
+        <div className="text-right">
+          <Button color="primary" onClick={this.handleLogout}>
             Logout
           </Button>
-        </p>
+        </div>
+        <div>
+          <Input
+            type="text"
+            placeholder="Search..."
+            value={this.state.searchText}
+            onChange={this.handleSearch}
+          />
+        </div>
         <Nav tabs>
           <NavItem>
             <NavLink
               className={classnames({ active: this.state.activeTab === '1' })}
               onClick={() => {
-                this.toggle('1');
+                this.handleToggle('1');
               }}
             >
-              Airtist
+              Artist
             </NavLink>
           </NavItem>
           <NavItem>
             <NavLink
               className={classnames({ active: this.state.activeTab === '2' })}
               onClick={() => {
-                this.toggle('2');
+                this.handleToggle('2');
               }}
             >
               Albums
@@ -91,7 +121,7 @@ class HomePage extends React.Component {
             <NavLink
               className={classnames({ active: this.state.activeTab === '3' })}
               onClick={() => {
-                this.toggle('3');
+                this.handleToggle('3');
               }}
             >
               Tracks
@@ -101,7 +131,7 @@ class HomePage extends React.Component {
             <NavLink
               className={classnames({ active: this.state.activeTab === '4' })}
               onClick={() => {
-                this.toggle('4');
+                this.handleToggle('4');
               }}
             >
               Playlist
@@ -122,6 +152,13 @@ class HomePage extends React.Component {
           <TabPane tabId="2">
             <Row>
               <Col sm="12">
+                {authentication.isAdmin ? (
+                  <div className="text-right">
+                    <Button color="primary">Add Album</Button>
+                  </div>
+                ) : (
+                  ''
+                )}
                 <DataList names={authentication.albumNames} addButton={true} />
               </Col>
             </Row>
@@ -129,6 +166,13 @@ class HomePage extends React.Component {
           <TabPane tabId="3">
             <Row>
               <Col sm="12">
+                {authentication.isAdmin ? (
+                  <div className="text-right">
+                    <Button color="primary">Add Track</Button>
+                  </div>
+                ) : (
+                  ''
+                )}
                 <DataList names={authentication.tracks} addButton={true} />
               </Col>
             </Row>
@@ -136,6 +180,15 @@ class HomePage extends React.Component {
           <TabPane tabId="4">
             <Row>
               <Col sm="12">
+                {authentication.isAdmin ? (
+                  <div className="text-right">
+                    <Link to={routes.NEW_PLAYLIST} className="btn btn-link">
+                      <Button color="primary">Add Playlist</Button>
+                    </Link>
+                  </div>
+                ) : (
+                  ''
+                )}
                 <DataList names={authentication.plyalists} addButton={false} />
               </Col>
             </Row>

@@ -7,6 +7,7 @@ import CounterPage from './containers/CounterPage';
 import NewAlbumPage from './containers/NewAlbumPage';
 import NewArtistPage from './containers/NewArtistPage';
 import NewTrackPage from './containers/NewTrackPage';
+import CreatePlaylist from './containers/NewPlaylistPage';
 import PlaylistsPage from './containers/PlaylistsPage';
 import RegisterPage from './containers/RegisterPage';
 import Track from './components/Track';
@@ -24,13 +25,19 @@ class Routes extends Component {
           render={props => (
             <React.Fragment>
               {isLoggedIn ? null : <Redirect to={routes.LOGIN} />}
-              <HomePage />
+
               <div className="primary-navigation-content">
                 <Switch>
-                <Route exact path={routes.TRACK} component = { Track } />
+                  <Route exact path="/" component={HomePage} />
+                  <Route path={routes.TRACK} component={Track} />
+                  <Route path={routes.HOME} component={HomePage} />
                   <Route path={routes.COUNTER} component={CounterPage} />
                   <Route path={routes.NEW_ALBUM} component={NewAlbumPage} />
                   <Route path={routes.NEW_ARTIST} component={NewArtistPage} />
+                  <Route
+                    path={routes.NEW_PLAYLIST}
+                    component={CreatePlaylist}
+                  />
                   <Route path={routes.NEW_TRACK} component={NewTrackPage} />
                   <Route path={routes.PLAYLISTS} component={PlaylistsPage} />
                 </Switch>

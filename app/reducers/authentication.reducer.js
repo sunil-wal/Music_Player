@@ -31,28 +31,33 @@ export function authentication(state = initialState, action) {
       return {
         ...musicData,
         isLoggedIn: false,
+        isAdmin: false,
         user: action.user
       };
     case userConstants.LOGIN_SUCCESS:
       return {
         ...musicData,
         isLoggedIn: true,
+        isAdmin: true,
         user: action.user
       };
     case userConstants.LOGIN_FAILURE:
       return {
         ...musicData,
+        isAdmin: false,
         isLoggedIn: false
       };
     case userConstants.LOGOUT:
       return {
         ...musicData,
+        isAdmin: false,
         isLoggedIn: false
       };
     default:
       return {
         ...state,
         ...musicData,
+        isAdmin: false,
         isLoggedIn: false
       };
   }

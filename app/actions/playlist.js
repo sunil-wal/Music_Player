@@ -17,3 +17,21 @@ export const getPlaylists = () => dispatch => {
     })
     .catch(error => dispatch(getPlaylistsError(error)));
 };
+
+// create playlist actions
+export const createPlaylistSuccess = message => {
+  return { type: PLAYLIST.SAVE_SUCCESS, message };
+};
+
+export const createPlaylistError = error => {
+  return { type: PLAYLIST.SAVE_ERROR, message: error.message };
+};
+
+export const createPlaylist = payload => dispatch => {
+  return axios
+    .post('https://musicplayer-api-wal.herokuapp.com/api/v1/playlist', payload)
+    .then(json => {
+      dispatch(createPlaylistSuccess(json.data.message));
+    })
+    .catch(error => dispatch(createPlaylistError(error)));
+};

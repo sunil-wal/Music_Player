@@ -5,6 +5,7 @@
   "LOGIN": "/",
   "NEW_ALBUM": "/new-album",
   "NEW_ARTIST": "/new-artist",
+  "NEW_PLAYLIST": "/new-playlist",
   "NEW_TRACK": "/new-track",
   "PLAYLISTS": "/playlists",
   "TRACK":"/track"
