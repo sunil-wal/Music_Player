@@ -2,7 +2,8 @@ import React from 'react';
 import { Link, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { userActions } from '../actions';
-import { Button } from 'reactstrap';
+import { Button, FormGroup } from 'reactstrap';
+import styles from './Login.css';
 
 class LoginPage extends React.Component {
   constructor(props) {
@@ -33,21 +34,23 @@ class LoginPage extends React.Component {
   render() {
     const { username, password } = this.state;
     return (
-      <div className="col-md-6 col-md-offset-3">
-        {(this.props.isLoggedIn) ? <Redirect to={{pathname:'/home'}}/> : null}
-        <h2>Login</h2>
+      <div id={styles.loginPage}>
+        {this.props.isLoggedIn ? <Redirect to={{ pathname: '/home' }} /> : null}
+        <h3>Login</h3>
+        <br />
         <form name="form" onSubmit={this.handleSubmit}>
-          <div>
-            <label hasfor="username">Username</label>
+          <FormGroup>
+            <label hasfor="username">Email</label>
             <input
               type="text"
               name="username"
+              autoFocus
               className="form-control"
               value={username}
               onChange={this.handleChange}
             />
-          </div>
-          <div>
+          </FormGroup>
+          <FormGroup>
             <label hasfor="password">Password</label>
             <input
               type="password"
@@ -56,11 +59,11 @@ class LoginPage extends React.Component {
               value={password}
               onChange={this.handleChange}
             />
-          </div>
-          <div>
-            <Button color="primary">Login</Button>
+          </FormGroup>
+          <div id={styles.loginActions}>
+            <Button color="primary">LOGIN</Button>
             <Link to="/register" className="btn btn-link">
-              Register
+              SIGN UP
             </Link>
           </div>
         </form>

@@ -19,6 +19,7 @@ import classnames from 'classnames';
 import { userActions } from '../actions';
 import DataPagination from './DataPagination';
 import { getArtist, getAlbum, getTrack } from '../actions';
+import styles from './HomePage.css';
 
 function DataList(props) {
   const names = props.names;
@@ -86,12 +87,13 @@ class HomePage extends React.Component {
   render() {
     const { authentication, allArtist, allAlbum, allTrack } = this.props;
     return (
-      <div>
+      <div id={styles.homePage}>
         <div className="text-right">
           <Button color="primary" onClick={this.handleLogout}>
             Logout
           </Button>
         </div>
+        <br />
         <div>
           <Input
             type="text"
@@ -100,10 +102,13 @@ class HomePage extends React.Component {
             onChange={this.handleSearch}
           />
         </div>
+        <br />
         <Nav tabs>
           <NavItem>
             <NavLink
-              className={classnames({ active: this.state.activeTab === '1' })}
+              className={classnames({
+                active: this.state.activeTab === '1'
+              })}
               onClick={() => {
                 this.handleToggle('1');
               }}
@@ -113,7 +118,9 @@ class HomePage extends React.Component {
           </NavItem>
           <NavItem>
             <NavLink
-              className={classnames({ active: this.state.activeTab === '2' })}
+              className={classnames({
+                active: this.state.activeTab === '2'
+              })}
               onClick={() => {
                 this.handleToggle('2');
               }}
@@ -123,7 +130,9 @@ class HomePage extends React.Component {
           </NavItem>
           <NavItem>
             <NavLink
-              className={classnames({ active: this.state.activeTab === '3' })}
+              className={classnames({
+                active: this.state.activeTab === '3'
+              })}
               onClick={() => {
                 this.handleToggle('3');
               }}
@@ -133,7 +142,9 @@ class HomePage extends React.Component {
           </NavItem>
           <NavItem>
             <NavLink
-              className={classnames({ active: this.state.activeTab === '4' })}
+              className={classnames({
+                active: this.state.activeTab === '4'
+              })}
               onClick={() => {
                 this.handleToggle('4');
               }}
@@ -148,7 +159,9 @@ class HomePage extends React.Component {
               <Col sm="12">
                 {authentication.isAdmin ? (
                   <div className="text-right">
-                    <Button color="primary">Add Artist</Button>
+                    <Link to={routes.NEW_ARTIST} className="btn btn-link">
+                      <Button color="primary">Add Artist</Button>
+                    </Link>
                   </div>
                 ) : (
                   ''
@@ -162,7 +175,9 @@ class HomePage extends React.Component {
               <Col sm="12">
                 {authentication.isAdmin ? (
                   <div className="text-right">
-                    <Button color="primary">Add Album</Button>
+                    <Link to={routes.NEW_ALBUM} className="btn btn-link">
+                      <Button color="primary">Add Album</Button>
+                    </Link>
                   </div>
                 ) : (
                   ''
@@ -176,7 +191,9 @@ class HomePage extends React.Component {
               <Col sm="12">
                 {authentication.isAdmin ? (
                   <div className="text-right">
-                    <Button color="primary">Add Track</Button>
+                    <Link to={routes.NEW_TRACK} className="btn btn-link">
+                      <Button color="primary">Add Track</Button>
+                    </Link>
                   </div>
                 ) : (
                   ''

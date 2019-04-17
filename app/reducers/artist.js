@@ -3,11 +3,11 @@ import { ARTIST } from '../constants/types';
 const artist = (state = {}, action) => {
   switch (action.type) {
     case ARTIST.SAVE_SUCCESS:
-      const { message } = action;
+      const { success } = action;
 
       return {
         ...state,
-        message
+        success
       };
 
     case ARTIST.SAVE_ERROR:
