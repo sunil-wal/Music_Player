@@ -57,7 +57,7 @@ function register(user) {
     body: JSON.stringify(user)
   };
 
-  return fetch(`http://192.168.0.99:4001/api/v1/signup`, requestOptions).then(
+  return fetch(`https://musicplayer-api-wal.herokuapp.com/api/v1/signup`, requestOptions).then(
     handleResponse
   );
 }

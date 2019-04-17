@@ -37,18 +37,19 @@ function register(user) {
   return dispatch => {
     dispatch(request(user));
 
-    userService.register(user).then(
-      user => {
-        dispatch(success());
-        history.push('/login');
-        dispatch(alertActions.success('Registration successful'));
-      },
-      error => {
-        dispatch(failure(error.toString()));
-        dispatch(alertActions.error(error.toString()));
-      }
-    );
-  };
+    userService.register(user)
+        .then(
+            user => {
+                dispatch(success());
+                history.push('/login');
+                //dispatch(alertActions.success('Registration successful'));
+            },
+            error => {
+                dispatch(failure(error.toString()));
+               // dispatch(alertActions.error(error.toString()));
+            }
+        );
+};
 
   function request(user) {
     return { type: userConstants.REGISTER_REQUEST, user };
