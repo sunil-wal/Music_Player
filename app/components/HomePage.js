@@ -1,7 +1,9 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 import routes from '../constants/routes';
+import { history } from '../helpers';
+import { browserHistory } from 'react-router';
 import {
   TabContent,
   TabPane,
@@ -22,8 +24,13 @@ function DataList(props) {
   const names = props.names;
   let addButton = props.addButton;
   const listItems = names.map((name, index) => (
-    <ListGroupItem key={name + index}>
-      {name}
+    <ListGroupItem
+      key={name + index}
+      onClick={() => {
+        console.log('details');
+      }}
+    >
+      <Link to="/track">{name}</Link>
       {addButton ? (
         <button className="btn-xs btn btn-primary pull-right">
           Add to playlist
@@ -180,15 +187,18 @@ class HomePage extends React.Component {
           <TabPane tabId="4">
             <Row>
               <Col sm="12">
-                {authentication.isAdmin ? (
-                  <div className="text-right">
+                <div className="text-right">
+                  <Link to={routes.PLAYLIST_REPORT}>
+                    <Button color="warning">Playlist Report</Button>
+                  </Link>
+                  {authentication.isAdmin ? (
                     <Link to={routes.NEW_PLAYLIST} className="btn btn-link">
                       <Button color="primary">Add Playlist</Button>
                     </Link>
-                  </div>
-                ) : (
-                  ''
-                )}
+                  ) : (
+                    ''
+                  )}
+                </div>
                 <DataList names={authentication.plyalists} addButton={false} />
               </Col>
             </Row>
