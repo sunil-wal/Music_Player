@@ -14,81 +14,64 @@ import {
   Row,
   Col,
   ListGroup,
-  ListGroupItem,
-  Pagination,
-  PaginationItem,
-  PaginationLink
+  ListGroupItem
 } from 'reactstrap';
 import classnames from 'classnames';
 import { userActions } from '../actions';
-import DataPagination from './DataPagination';
 
 function DataList(props) {
   const names = props.names;
+  let addButton = props.addButton;
   const listItems = names.map((name, index) => (
-    <ListGroupItem key={name + index}>{name}</ListGroupItem>
+    <ListGroupItem key={name + index}>
+      {name}
+      {addButton ? (
+        <button className="btn-xs btn btn-primary pull-right">
+          Add to playlist
+        </button>
+      ) : null}
+    </ListGroupItem>
   ));
-  return (
-    <div>
-      <ListGroup>{listItems}</ListGroup>
-      <DataPagination itemsLength={listItems.length} />
-    </div>
-  );
+  return <ListGroup>{listItems}</ListGroup>;
 }
 
 class HomePage extends React.Component {
   constructor(props) {
     super(props);
 
-    this.dataSet = [...Array(Math.ceil(Math.random() * 10))].map(
-      (a, i) => 'Record ' + (i + 1)
-    );
-
-    this.pageSize = 3;
-    this.pagesCount = Math.ceil(this.dataSet.length / this.pageSize);
-
-    this.handleToggle = this.handleToggle.bind(this);
-    this.handleLogout = this.handleLogout.bind(this);
-    this.handlePageChange = this.handlePageChange.bind(this);
+    this.toggle = this.toggle.bind(this);
+    this.logoutFun = this.logoutFun.bind(this);
     this.state = {
-      activeTab: '1',
-      currentPage: 0
+      activeTab: '1'
+      //addButton: false
     };
   }
-  handleToggle(tab) {
+  toggle(tab) {
     if (this.state.activeTab !== tab) {
       this.setState({
         activeTab: tab
       });
     }
   }
-  handleLogout() {
+  logoutFun() {
     this.props.dispatch(userActions.logout());
-  }
-  handlePageChange(e, index) {
-    e.preventDefault();
-
-    this.setState({
-      currentPage: index
-    });
   }
 
   render() {
     const { authentication } = this.props;
     return (
       <div>
-      <div className="text-right">
-          <Button color="primary" onClick={this.handleLogout}>
+        <p>
+          <Button color="primary" onClick={this.logoutFun}>
             Logout
           </Button>
-        </div>
-        <div />
+        </p>
         <Nav tabs>
           <NavItem>
             <NavLink
               className={classnames({ active: this.state.activeTab === '1' })}
               onClick={() => {
-                this.handleToggle('1');
+                this.toggle('1');
               }}
             >
               Airtist
@@ -98,7 +81,7 @@ class HomePage extends React.Component {
             <NavLink
               className={classnames({ active: this.state.activeTab === '2' })}
               onClick={() => {
-                this.handleToggle('2');
+                this.toggle('2');
               }}
             >
               Albums
@@ -108,7 +91,7 @@ class HomePage extends React.Component {
             <NavLink
               className={classnames({ active: this.state.activeTab === '3' })}
               onClick={() => {
-                this.handleToggle('3');
+                this.toggle('3');
               }}
             >
               Tracks
@@ -118,7 +101,7 @@ class HomePage extends React.Component {
             <NavLink
               className={classnames({ active: this.state.activeTab === '4' })}
               onClick={() => {
-                this.handleToggle('4');
+                this.toggle('4');
               }}
             >
               Playlist
@@ -129,40 +112,31 @@ class HomePage extends React.Component {
           <TabPane tabId="1">
             <Row>
               <Col sm="12">
-                <div className="text-right">
-                  <Button color="primary">Add Artist</Button>
-                </div>
-                <DataList names={authentication.artistNames} />
+                <DataList
+                  names={authentication.artistNames}
+                  addButton={false}
+                />
               </Col>
             </Row>
           </TabPane>
           <TabPane tabId="2">
             <Row>
               <Col sm="12">
-                <div className="text-right">
-                  <Button color="primary">Add Album</Button>
-                </div>
-                <DataList names={authentication.albumNames} />
+                <DataList names={authentication.albumNames} addButton={true} />
               </Col>
             </Row>
           </TabPane>
           <TabPane tabId="3">
             <Row>
               <Col sm="12">
-                <div className="text-right">
-                  <Button color="primary">Add Track</Button>
-                </div>
-                <DataList names={authentication.tracks} />
+                <DataList names={authentication.tracks} addButton={true} />
               </Col>
             </Row>
           </TabPane>
           <TabPane tabId="4">
             <Row>
               <Col sm="12">
-                <div className="text-right">
-                  <Button color="primary">Add Playlist</Button>
-                </div>
-                <DataList names={authentication.plyalists} />
+                <DataList names={authentication.plyalists} addButton={false} />
               </Col>
             </Row>
           </TabPane>
@@ -171,6 +145,17 @@ class HomePage extends React.Component {
     );
   }
 }
+// <div className="col-md-6 col-md-offset-3">
+//                 <h1>Hi</h1>
+//                 <h3>Artists:</h3>
+//                 <DataList names={authentication.artistNames} />
+//                 <h3>Albums:</h3>
+//                 <DataList names={authentication.albumNames} />
+//                 <h3>Tracks:</h3>
+//                 <DataList names={authentication.tracks} />
+//                 <h3>Playlist:</h3>
+//                 <DataList names={authentication.plyalists} />
+//             </div>
 function mapStateToProps(state) {
   const { authentication } = state;
   return {
