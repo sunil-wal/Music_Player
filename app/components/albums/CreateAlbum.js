@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Button, Form, FormGroup, Label, Input, Alert } from 'reactstrap';
+import { Redirect } from 'react-router-dom';
 import styles from './CreateAlbum.css';
 
 class CreateAlbum extends Component {
@@ -26,11 +27,11 @@ class CreateAlbum extends Component {
   };
 
   render() {
-    const { message } = this.props.album;
+    const { success } = this.props.album;
 
     return (
       <div className={styles.newAlbumContainer}>
-        {message ? <Alert color="success">{message}</Alert> : null}
+        {success ? <Redirect to={{ pathname: '/home' }} /> : null}
         <h2 className={styles.newAlbumTitle}>New Album</h2>
         <Form onSubmit={this.saveAlbum}>
           <FormGroup>
@@ -53,7 +54,7 @@ class CreateAlbum extends Component {
               onChange={this.changeHandler}
             />
           </FormGroup>
-          <Button>Save</Button>
+          <Button color="primary">Save</Button>
         </Form>
       </div>
     );

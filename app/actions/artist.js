@@ -2,29 +2,37 @@ import { ARTIST } from '../constants/types';
 import * as axios from 'axios';
 import { authHeader } from '../helpers';
 
-export const createArtistSuccess = message => {
-  return { type: ARTIST.SAVE_SUCCESS, message };
+export const createArtistSuccess = success => {
+  return { type: ARTIST.SAVE_SUCCESS, success };
 };
 
-export const createArtistError = error => {
-  return { type: ARTIST.SAVE_ERROR, message: error.message };
+export const createArtistError = success => {
+  return { type: ARTIST.SAVE_ERROR, success };
 };
 
 export const createArtist = payload => dispatch => {
+  const config = {
+    headers: authHeader()
+  };
+
   return axios
-    .post('http://localhost:3000/artist', payload)
+    .post(
+      'https://musicplayer-api-wal.herokuapp.com/api/v1/artists',
+      payload,
+      config
+    )
     .then(json => {
-      dispatch(createArtistSuccess(json.data.message));
+      dispatch(createArtistSuccess(json.data.success));
     })
-    .catch(error => dispatch(createArtistError(error)));
+    .catch(error => dispatch(createArtistError(json.data.success)));
 };
 
 export const getArtistSuccess = artist => {
   return { type: ARTIST.SUCCESS, artist };
 };
 
-export const getArtistError = error => {
-  return { type: ARTIST.ERROR, message: error.message };
+export const getArtistError = json => {
+  return { type: ARTIST.ERROR, message: json.data.success };
 };
 
 export const getArtist = () => dispatch => {

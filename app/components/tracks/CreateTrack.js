@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Button, Form, FormGroup, Label, Input } from 'reactstrap';
+import { Redirect } from 'react-router-dom';
 import styles from './CreateTrack.css';
 
 class CreateTrack extends Component {
@@ -83,7 +84,7 @@ class CreateTrack extends Component {
               <option>pop</option>
             </Input>
           </FormGroup>
-          <Button>Save</Button>
+          <Button color="primary">Save</Button>
         </Form>
       </div>
     );
