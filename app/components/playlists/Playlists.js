@@ -8,7 +8,7 @@ class Playlists extends Component {
   }
 
   render() {
-    const { playlists, message } = this.props.playlists;
+    const { playlists, message } = this.props.updatePlaylists;
 
     if (message) {
       return <div>There was some error</div>;

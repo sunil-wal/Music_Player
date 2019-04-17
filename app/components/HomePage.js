@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
+import routes from '../constants/routes';
 import {
   TabContent,
   TabPane,
@@ -182,7 +183,9 @@ class HomePage extends React.Component {
               <Col sm="12">
                 {authentication.isAdmin ? (
                   <div className="text-right">
-                    <Button color="primary">Add Playlist</Button>
+                    <Link to={routes.NEW_PLAYLIST} className="btn btn-link">
+                     <Button color="primary">Add Playlist</Button>
+                    </Link>
                   </div>
                 ) : (
                   ''
