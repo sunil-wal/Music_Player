@@ -8,7 +8,7 @@ class DataPagination extends React.Component {
     super(props);
     this.itemsLength = this.props.itemsLength;
 
-    this.pageSize = 3;
+    this.pageSize = 5;
     this.pagesCount = Math.ceil(this.itemsLength / this.pageSize);
 
     this.handlePageChange = this.handlePageChange.bind(this);

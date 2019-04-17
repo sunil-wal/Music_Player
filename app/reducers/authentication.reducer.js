@@ -31,26 +31,25 @@ export function authentication(state = initialState, action) {
       return {
         ...musicData,
         isLoggedIn: false,
-        isAdmin: false,
+        isAdmin: action.user.userRole == 'admin' ? true : false,
         user: action.user
       };
     case userConstants.LOGIN_SUCCESS:
       return {
         ...musicData,
         isLoggedIn: true,
-        isAdmin: true,
+        isAdmin: action.user.userRole == 'admin' ? true : false,
         user: action.user
       };
     case userConstants.LOGIN_FAILURE:
       return {
         ...musicData,
-        isAdmin: false,
+        isAdmin: action.user.userRole == 'admin' ? true : false,
         isLoggedIn: false
       };
     case userConstants.LOGOUT:
       return {
         ...musicData,
-        isAdmin: false,
         isLoggedIn: false
       };
     default:
@@ -60,20 +59,3 @@ export function authentication(state = initialState, action) {
       };
   }
 }
-
-// const handlers = {
-//   [userConstants.LOGIN_SUCCESS] : (state, action)=> ({
-//     loggedIn: true,
-//     user: action.user
-//   }),
-//   [userConstants.LOGIN_FAILURE] : {},
-//   [userConstants.LOGOUT] : {}
-// };
-
-// export function authentication2(state = initialState, action) {
-
-//   if(handlers[action.type]) {
-//     return handlers[action.type](state, action);
-//   }
-//   return state;
-// }
