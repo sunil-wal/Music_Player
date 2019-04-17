@@ -38,7 +38,7 @@ class LoginPage extends React.Component {
         <h2>Login</h2>
         <form name="form" onSubmit={this.handleSubmit}>
           <div>
-            <label hasFor="username">Username</label>
+            <label hasfor="username">Username</label>
             <input
               type="text"
               name="username"
@@ -48,7 +48,7 @@ class LoginPage extends React.Component {
             />
           </div>
           <div>
-            <label hasFor="password">Password</label>
+            <label hasfor="password">Password</label>
             <input
               type="password"
               name="password"

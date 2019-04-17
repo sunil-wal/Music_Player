@@ -164,7 +164,7 @@ class HomePage extends React.Component {
                 ) : (
                   ''
                 )}
-                <DataList names={authentication.albumNames} />
+                <DataList names={authentication.albumNames} addButton={true} />
               </Col>
             </Row>
           </TabPane>
@@ -178,7 +178,7 @@ class HomePage extends React.Component {
                 ) : (
                   ''
                 )}
-                <DataList names={authentication.tracks} />
+                <DataList names={authentication.tracks} addButton={true} />
               </Col>
             </Row>
           </TabPane>
@@ -194,7 +194,7 @@ class HomePage extends React.Component {
                 ) : (
                   ''
                 )}
-                <DataList names={authentication.plyalists} />
+                <DataList names={authentication.playlists} addButton={false} />
               </Col>
             </Row>
           </TabPane>
