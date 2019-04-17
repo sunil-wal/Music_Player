@@ -26,3 +26,24 @@ export const createAlbum = payload => dispatch => {
     })
     .catch(error => dispatch(createAlbumError(json.data.success)));
 };
+
+export const getAlbumSuccess = album => {
+  return { type: ALBUM.SUCCESS, album };
+};
+
+export const getAlbumError = error => {
+  return { type: ALBUM.ERROR, message: error.message };
+};
+
+export const getAlbum = () => dispatch => {
+  const headerData = {
+    headers: authHeader()
+  };
+  console.log(headerData);
+  return axios
+    .get('https://musicplayer-api-wal.herokuapp.com/api/v1/albums', headerData)
+    .then(json => {
+      dispatch(getAlbumSuccess(json.data.result));
+    })
+    .catch(error => dispatch(getAlbumError(error)));
+};

@@ -18,18 +18,18 @@ import {
 import classnames from 'classnames';
 import { userActions } from '../actions';
 import DataPagination from './DataPagination';
-import { getArtist } from '../actions/artist';
+import { getArtist, getAlbum, getTrack } from '../actions';
 import styles from './HomePage.css';
 
 function DataList(props) {
   const names = props.names;
-  const listItems = names.map((name, index) => {
+  const listItems = names.rows.map((name, index) => {
     return <ListGroupItem key={name + index}>{name}</ListGroupItem>;
   });
   return (
     <div>
       <ListGroup>{listItems}</ListGroup>
-      <DataPagination itemsLength={listItems.length} />
+      <DataPagination itemsLength={names.count} />
     </div>
   );
 }
@@ -42,7 +42,7 @@ class HomePage extends React.Component {
       (a, i) => 'Record ' + (i + 1)
     );
 
-    this.pageSize = 3;
+    this.pageSize = 5;
     this.pagesCount = Math.ceil(this.dataSet.length / this.pageSize);
 
     this.handleToggle = this.handleToggle.bind(this);
@@ -56,7 +56,10 @@ class HomePage extends React.Component {
     };
   }
   componentDidMount() {
-    this.props.dispatch(getArtist());
+    const { dispatch } = this.props;
+    dispatch(getArtist());
+    dispatch(getAlbum());
+    dispatch(getTrack());
   }
   handleToggle(tab) {
     if (this.state.activeTab !== tab) {
@@ -82,7 +85,7 @@ class HomePage extends React.Component {
   }
 
   render() {
-    const { authentication, allArtist } = this.props;
+    const { authentication, allArtist, allAlbum, allTrack } = this.props;
     return (
       <div id={styles.homePage}>
         <div className="text-right">
@@ -179,7 +182,7 @@ class HomePage extends React.Component {
                 ) : (
                   ''
                 )}
-                <DataList names={authentication.albumNames} addButton={true} />
+                {allAlbum ? <DataList names={allAlbum} addButton={true} /> : ''}
               </Col>
             </Row>
           </TabPane>
@@ -195,23 +198,19 @@ class HomePage extends React.Component {
                 ) : (
                   ''
                 )}
-                <DataList names={authentication.tracks} addButton={true} />
+                {allTrack ? <DataList names={allTrack} addButton={true} /> : ''}
               </Col>
             </Row>
           </TabPane>
           <TabPane tabId="4">
             <Row>
               <Col sm="12">
-                {authentication.isAdmin ? (
-                  <div className="text-right">
-                    <Link to={routes.NEW_PLAYLIST} className="btn btn-link">
-                      <Button color="primary">Add Playlist</Button>
-                    </Link>
-                  </div>
-                ) : (
-                  ''
-                )}
-                <DataList names={authentication.playlists} addButton={false} />
+                <div className="text-right">
+                  <Link to={routes.NEW_PLAYLIST} className="btn btn-link">
+                    <Button color="primary">Add Playlist</Button>
+                  </Link>
+                </div>
+                {/*<DataList names={authentication.playlists} addButton={false} />*/}
               </Col>
             </Row>
           </TabPane>
@@ -221,10 +220,12 @@ class HomePage extends React.Component {
   }
 }
 function mapStateToProps(state) {
-  const { authentication, artist } = state;
+  const { authentication, artist, album, track } = state;
   return {
     authentication,
-    allArtist: artist.allArtist
+    allArtist: artist.allArtist,
+    allAlbum: album.allAlbum,
+    allTrack: track.allTrack
   };
 }
 
