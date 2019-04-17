@@ -17,11 +17,11 @@ const artist = (state = {}, action) => {
         ...state
       };
     case ARTIST.SUCCESS:
-      const { rows } = action.artist;
+      const { rows, count } = action.artist;
 
       return {
         ...state,
-        allArtist: rows.map(data => data.name)
+        allArtist: { rows: rows.map(data => data.name), count }
       };
 
     case ARTIST.ERROR:
