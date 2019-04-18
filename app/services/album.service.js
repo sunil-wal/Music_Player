@@ -1,10 +1,11 @@
 import axios from './http.service';
 
-export const getAlbum = async (offset = 0) => {
+export const getAlbum = async (page = 1, searchText = '') => {
   let response = await axios({
     url: '/albums',
     params: {
-      offset
+      page,
+      searchText
     }
   });
 
