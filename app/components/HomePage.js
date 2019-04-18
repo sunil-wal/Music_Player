@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import routes from '../constants/routes';
 import { history } from '../helpers';
 import { browserHistory } from 'react-router';
+import { ARTIST, ALBUM, TRACK } from '../constants';
 import {
   TabContent,
   TabPane,
@@ -23,26 +24,31 @@ import {
 } from 'reactstrap';
 import classnames from 'classnames';
 import { userActions } from '../actions';
+import DataPagination from './DataPagination';
+import { getAlbum, getArtists, getTracks } from '../services';
+import styles from './HomePage.css';
 
 function DataList(props) {
   const names = props.names;
   let addButton = props.addButton;
-  const listItems = names.map((name, index) => (
-    <ListGroupItem
-      key={name + index}
-      onClick={() => {
-        console.log('details');
-      }}
-    >
-      <Link to="/track">{name}</Link>
-      {addButton ? (
+  const listItems = names.rows.map((name, index) => {
+    return <ListGroupItem key={name + index}>{name}</ListGroupItem>;
+    {
+      addButton ? (
         <button className="btn-xs btn btn-primary pull-right">
           Add to playlist
         </button>
-      ) : null}
-    </ListGroupItem>
-  ));
-  return <ListGroup>{listItems}</ListGroup>;
+      ) : null;
+    }
+  });
+  return (
+    <div>
+      <ListGroup>
+        <Link to="/track">{listItems}</Link>
+      </ListGroup>
+      <DataPagination itemsLength={names.count} />
+    </div>
+  );
 }
 
 class HomePage extends React.Component {
@@ -53,20 +59,22 @@ class HomePage extends React.Component {
       (a, i) => 'Record ' + (i + 1)
     );
 
-    this.pageSize = 3;
+    this.pageSize = 5;
     this.pagesCount = Math.ceil(this.dataSet.length / this.pageSize);
 
     this.handleToggle = this.handleToggle.bind(this);
     this.handleLogout = this.handleLogout.bind(this);
-    this.handlePageChange = this.handlePageChange.bind(this);
     this.handleSearch = this.handleSearch.bind(this);
     this.state = {
       activeTab: '1',
-      currentPage: 0,
       searchText: ''
     };
   }
-
+  componentDidMount() {
+    const { dispatch } = this.props;
+    this.props.clearData();
+    this.props.loadData();
+  }
   handleToggle(tab) {
     if (this.state.activeTab !== tab) {
       this.setState({
@@ -77,13 +85,6 @@ class HomePage extends React.Component {
   handleLogout() {
     this.props.dispatch(userActions.logout());
   }
-  handlePageChange(e, index) {
-    e.preventDefault();
-
-    this.setState({
-      currentPage: index
-    });
-  }
   handleSearch(event) {
     this.setState({
       searchText: event.target.value
@@ -91,14 +92,15 @@ class HomePage extends React.Component {
   }
 
   render() {
-    const { authentication } = this.props;
+    const { authentication, allArtist, allAlbum, allTrack } = this.props;
     return (
-      <div>
+      <div id={styles.homePage}>
         <div className="text-right">
           <Button color="primary" onClick={this.handleLogout}>
             Logout
           </Button>
         </div>
+        <br />
         <div>
           <Input
             type="text"
@@ -107,10 +109,13 @@ class HomePage extends React.Component {
             onChange={this.handleSearch}
           />
         </div>
+        <br />
         <Nav tabs>
           <NavItem>
             <NavLink
-              className={classnames({ active: this.state.activeTab === '1' })}
+              className={classnames({
+                active: this.state.activeTab === '1'
+              })}
               onClick={() => {
                 this.handleToggle('1');
               }}
@@ -120,7 +125,9 @@ class HomePage extends React.Component {
           </NavItem>
           <NavItem>
             <NavLink
-              className={classnames({ active: this.state.activeTab === '2' })}
+              className={classnames({
+                active: this.state.activeTab === '2'
+              })}
               onClick={() => {
                 this.handleToggle('2');
               }}
@@ -130,7 +137,9 @@ class HomePage extends React.Component {
           </NavItem>
           <NavItem>
             <NavLink
-              className={classnames({ active: this.state.activeTab === '3' })}
+              className={classnames({
+                active: this.state.activeTab === '3'
+              })}
               onClick={() => {
                 this.handleToggle('3');
               }}
@@ -140,7 +149,9 @@ class HomePage extends React.Component {
           </NavItem>
           <NavItem>
             <NavLink
-              className={classnames({ active: this.state.activeTab === '4' })}
+              className={classnames({
+                active: this.state.activeTab === '4'
+              })}
               onClick={() => {
                 this.handleToggle('4');
               }}
@@ -153,10 +164,16 @@ class HomePage extends React.Component {
           <TabPane tabId="1">
             <Row>
               <Col sm="12">
-                <DataList
-                  names={authentication.artistNames}
-                  addButton={false}
-                />
+                {authentication.isAdmin ? (
+                  <div className="text-right">
+                    <Link to={routes.NEW_ARTIST} className="btn btn-link">
+                      <Button color="primary">Add Artist</Button>
+                    </Link>
+                  </div>
+                ) : (
+                  ''
+                )}
+                {allArtist ? <DataList names={allArtist} /> : ''}
               </Col>
             </Row>
           </TabPane>
@@ -165,12 +182,14 @@ class HomePage extends React.Component {
               <Col sm="12">
                 {authentication.isAdmin ? (
                   <div className="text-right">
-                    <Button color="primary">Add Album</Button>
+                    <Link to={routes.NEW_ALBUM} className="btn btn-link">
+                      <Button color="primary">Add Album</Button>
+                    </Link>
                   </div>
                 ) : (
                   ''
                 )}
-                <DataList names={authentication.albumNames} addButton={true} />
+                {allAlbum ? <DataList names={allAlbum} addButton={true} /> : ''}
               </Col>
             </Row>
           </TabPane>
@@ -179,12 +198,14 @@ class HomePage extends React.Component {
               <Col sm="12">
                 {authentication.isAdmin ? (
                   <div className="text-right">
-                    <Button color="primary">Add Track</Button>
+                    <Link to={routes.NEW_TRACK} className="btn btn-link">
+                      <Button color="primary">Add Track</Button>
+                    </Link>
                   </div>
                 ) : (
                   ''
                 )}
-                <DataList names={authentication.tracks} addButton={true} />
+                {allTrack ? <DataList names={allTrack} addButton={true} /> : ''}
               </Col>
             </Row>
           </TabPane>
@@ -195,15 +216,10 @@ class HomePage extends React.Component {
                   <Link to={routes.PLAYLIST_REPORT}>
                     <Button color="warning">Playlist Report</Button>
                   </Link>
-                  {authentication.isAdmin ? (
-                    <Link to={routes.NEW_PLAYLIST} className="btn btn-link">
-                      <Button color="primary">Add Playlist</Button>
-                    </Link>
-                  ) : (
-                    ''
-                  )}
+                  <Link to={routes.NEW_PLAYLIST} className="btn btn-link">
+                    <Button color="primary">Add Playlist</Button>
+                  </Link>
                 </div>
-                <DataList names={authentication.plyalists} addButton={false} />
               </Col>
             </Row>
           </TabPane>
@@ -212,23 +228,59 @@ class HomePage extends React.Component {
     );
   }
 }
-// <div className="col-md-6 col-md-offset-3">
-//                 <h1>Hi</h1>
-//                 <h3>Artists:</h3>
-//                 <DataList names={authentication.artistNames} />
-//                 <h3>Albums:</h3>
-//                 <DataList names={authentication.albumNames} />
-//                 <h3>Tracks:</h3>
-//                 <DataList names={authentication.tracks} />
-//                 <h3>Playlist:</h3>
-//                 <DataList names={authentication.plyalists} />
-//             </div>
 function mapStateToProps(state) {
-  const { authentication } = state;
+  const { authentication, artist, album, track } = state;
   return {
-    authentication
+    authentication,
+    allArtist: artist.allArtist,
+    allAlbum: album.allAlbum,
+    allTrack: track.allTrack
   };
 }
 
-const connectedHomePage = connect(mapStateToProps)(HomePage);
+function mapDispatchToProps(dispatch) {
+  return {
+    clearData: () => {},
+    loadData() {
+      this.loadAlbum();
+      this.loadArtists();
+      this.loadTracks();
+    },
+
+    get loadAlbum() {
+      return async () => {
+        try {
+          let album = await getAlbum();
+          dispatch({ type: ALBUM.SUCCESS, album });
+        } catch (error) {
+          dispatch({ type: ALBUM.ERROR, message: error.message });
+        }
+      };
+    },
+    get loadArtists() {
+      return async () => {
+        try {
+          let artist = await getArtists();
+          dispatch({ type: ARTIST.SUCCESS, artist });
+        } catch (error) {
+          dispatch({ type: ARTIST.ERROR, message: error.message });
+        }
+      };
+    },
+    get loadTracks() {
+      return async () => {
+        try {
+          let track = await getTracks();
+          dispatch({ type: TRACK.SUCCESS, track });
+        } catch (error) {
+          dispatch({ type: TRACK.ERROR, message: error.message });
+        }
+      };
+    }
+  };
+}
+const connectedHomePage = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(HomePage);
 export { connectedHomePage as HomePage };

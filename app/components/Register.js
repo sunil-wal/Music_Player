@@ -19,10 +19,7 @@ import {
   FormText
 } from 'reactstrap';
 
-//type Props = {};
-
 class Register extends React.Component {
-  //props: Props;
   constructor(props) {
     super(props);
 
@@ -67,20 +64,15 @@ class Register extends React.Component {
     return (
       <Container>
         <Row>
-          <div>
-            <Link to={routes.LOGIN}>
-              <i className="fa fa-arrow-left fa-1x" />{' '}
-              <span>Already have an account! Sign in.</span>
-            </Link>
-            <br />
+          <div id={styles.signupContainer}>
+            <h3>Sign Up</h3>
             <br />
             <form name="form">
               <FormGroup
                 className={
-                  'form-group' +
-                  (this.state.submitted && !this.state.user.username
+                  this.state.submitted && !this.state.user.username
                     ? ' has-error'
-                    : '')
+                    : ''
                 }
               >
                 <Label for="username">Username</Label>
@@ -88,7 +80,7 @@ class Register extends React.Component {
                   type="text"
                   name="username"
                   id="username"
-                  placeholder="Username"
+                  autoFocus
                   value={this.state.user.username}
                   onChange={this.handleChange}
                 />
@@ -99,10 +91,9 @@ class Register extends React.Component {
 
               <FormGroup
                 className={
-                  'form-group' +
-                  (this.state.submitted && !this.state.user.email
+                  this.state.submitted && !this.state.user.email
                     ? ' has-error'
-                    : '')
+                    : ''
                 }
               >
                 <Label for="exampleEmail">Email</Label>
@@ -110,7 +101,6 @@ class Register extends React.Component {
                   type="email"
                   name="email"
                   id="exampleEmail"
-                  placeholder="Email"
                   value={this.state.user.email}
                   onChange={this.handleChange}
                 />
@@ -119,22 +109,18 @@ class Register extends React.Component {
                 )}
               </FormGroup>
 
-              <br />
-
               <FormGroup
                 className={
-                  'form-group' +
-                  (this.state.submitted && !this.state.user.password
+                  this.state.submitted && !this.state.user.password
                     ? ' has-error'
-                    : '')
+                    : ''
                 }
               >
-                <Label for="newPassword">New Password</Label>
+                <Label for="newPassword">Password</Label>
                 <Input
                   type="password"
                   name="password"
                   id="newPassword"
-                  placeholder="New Password"
                   value={this.state.user.password}
                   onChange={this.handleChange}
                 />
@@ -145,10 +131,16 @@ class Register extends React.Component {
 
               <br />
 
-              <Link to={routes.LOGIN}>
-                <button onClick={this.handleSubmit}>Sign up</button>
-              </Link>
+              <Button color="primary" onClick={this.handleSubmit}>
+                SIGN UP
+              </Button>
             </form>
+
+            <br />
+            <Link to={routes.LOGIN}>
+              <i className="fa fa-arrow-left fa-1x" />{' '}
+              <span>Already have an account! Login</span>
+            </Link>
           </div>
         </Row>
       </Container>

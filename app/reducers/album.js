@@ -14,7 +14,21 @@ const album = (state = {}, action) => {
       return {
         ...state
       };
+    case ALBUM.SUCCESS:
+      const { rows, count } = action.album;
 
+      return {
+        ...state,
+        allAlbum: { rows: rows.map(data => data.name), count }
+      };
+
+    case ALBUM.ERROR:
+      const errorMessage = action.message;
+
+      return {
+        ...state,
+        message: errorMessage
+      };
     default:
       return state;
   }
