@@ -11,8 +11,15 @@ export const createTrackError = success => {
 };
 
 export const createTrack = payload => dispatch => {
+  const config = {
+    headers: authHeader()
+  };
   return axios
-    .post('http://localhost:3000/track', payload)
+    .post(
+      'https://musicplayer-api-wal.herokuapp.com/api/v1/tracks',
+      payload,
+      config
+    )
     .then(json => {
       dispatch(createTrackSuccess(json.data.success));
     })

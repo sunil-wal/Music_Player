@@ -2,7 +2,7 @@ import React from 'react';
 import { Link, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { userActions } from '../actions';
-import { Button, FormGroup } from 'reactstrap';
+import { Button, FormGroup, Alert } from 'reactstrap';
 import styles from './Login.css';
 
 class LoginPage extends React.Component {
@@ -27,7 +27,12 @@ class LoginPage extends React.Component {
     const { username, password } = this.state;
     const { dispatch } = this.props;
     if (username && password) {
-      dispatch(userActions.login(username, password));
+      const payload = {
+        username,
+        password
+      };
+      this.props.submit(payload);
+      // dispatch(userActions.login(username, password));
     }
   }
 
@@ -38,6 +43,9 @@ class LoginPage extends React.Component {
         {this.props.isLoggedIn ? <Redirect to={{ pathname: '/home' }} /> : null}
         <h3>Login</h3>
         <br />
+        {this.props.error ? (
+          <Alert color="danger">{this.props.error}</Alert>
+        ) : null}
         <form name="form" onSubmit={this.handleSubmit}>
           <FormGroup>
             <label hasfor="username">Email</label>
@@ -72,10 +80,31 @@ class LoginPage extends React.Component {
   }
 }
 function mapStateToProps(state) {
-  const { isLoggedIn } = state.authentication;
+  const { isLoggedIn, error } = state.authentication;
   return {
-    isLoggedIn
+    isLoggedIn,
+    error
   };
 }
-export default connect(mapStateToProps)(LoginPage);
+function mapDispatchToProps(dispatch) {
+  return {
+    submit: payload => {
+      dispatch(async (dispatch, getStates) => {
+        try {
+          dispatch({ type: 'LOGIN_VALIDATE', payload });
+          const newState = getStates().authentication;
+          if (newState.error == '') {
+            dispatch(userActions.login(payload.username, payload.password));
+          }
+        } catch (error) {
+          console.log(error);
+        }
+      });
+    }
+  };
+}
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(LoginPage);
 // export default LoginPage;

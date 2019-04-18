@@ -84,7 +84,7 @@ class HomePage extends React.Component {
     }
   }
   handleLogout() {
-    this.props.dispatch(userActions.logout());
+    this.props.logout();
   }
 
   render() {
@@ -275,6 +275,9 @@ function mapDispatchToProps(dispatch) {
           dispatch({ type: TRACK.ERROR, message: error.message });
         }
       };
+    },
+    logout: () => {
+      dispatch(userActions.logout());
     }
   };
 }
