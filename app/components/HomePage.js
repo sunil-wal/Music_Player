@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import routes from '../constants/routes';
+import { ARTIST, ALBUM, TRACK } from '../constants';
 import {
   TabContent,
   TabPane,
@@ -18,7 +19,7 @@ import {
 import classnames from 'classnames';
 import { userActions } from '../actions';
 import DataPagination from './DataPagination';
-import { getArtist, getAlbum, getTrack } from '../actions';
+import { getAlbum, getArtists, getTracks } from '../services';
 import styles from './HomePage.css';
 
 function DataList(props) {
@@ -47,19 +48,16 @@ class HomePage extends React.Component {
 
     this.handleToggle = this.handleToggle.bind(this);
     this.handleLogout = this.handleLogout.bind(this);
-    this.handlePageChange = this.handlePageChange.bind(this);
     this.handleSearch = this.handleSearch.bind(this);
     this.state = {
       activeTab: '1',
-      currentPage: 0,
       searchText: ''
     };
   }
   componentDidMount() {
     const { dispatch } = this.props;
-    dispatch(getArtist());
-    dispatch(getAlbum());
-    dispatch(getTrack());
+    this.props.clearData();
+    this.props.loadData();
   }
   handleToggle(tab) {
     if (this.state.activeTab !== tab) {
@@ -70,13 +68,6 @@ class HomePage extends React.Component {
   }
   handleLogout() {
     this.props.dispatch(userActions.logout());
-  }
-  handlePageChange(e, index) {
-    e.preventDefault();
-
-    this.setState({
-      currentPage: index
-    });
   }
   handleSearch(event) {
     this.setState({
@@ -210,7 +201,6 @@ class HomePage extends React.Component {
                     <Button color="primary">Add Playlist</Button>
                   </Link>
                 </div>
-                {/*<DataList names={authentication.playlists} addButton={false} />*/}
               </Col>
             </Row>
           </TabPane>
@@ -229,5 +219,49 @@ function mapStateToProps(state) {
   };
 }
 
-const connectedHomePage = connect(mapStateToProps)(HomePage);
+function mapDispatchToProps(dispatch) {
+  return {
+    clearData: () => {},
+    loadData() {
+      this.loadAlbum();
+      this.loadArtists();
+      this.loadTracks();
+    },
+
+    get loadAlbum() {
+      return async () => {
+        try {
+          let album = await getAlbum();
+          dispatch({ type: ALBUM.SUCCESS, album });
+        } catch (error) {
+          dispatch({ type: ALBUM.ERROR, message: error.message });
+        }
+      };
+    },
+    get loadArtists() {
+      return async () => {
+        try {
+          let artist = await getArtists();
+          dispatch({ type: ARTIST.SUCCESS, artist });
+        } catch (error) {
+          dispatch({ type: ARTIST.ERROR, message: error.message });
+        }
+      };
+    },
+    get loadTracks() {
+      return async () => {
+        try {
+          let track = await getTracks();
+          dispatch({ type: TRACK.SUCCESS, track });
+        } catch (error) {
+          dispatch({ type: TRACK.ERROR, message: error.message });
+        }
+      };
+    }
+  };
+}
+const connectedHomePage = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(HomePage);
 export { connectedHomePage as HomePage };
