@@ -1,7 +1,9 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 import routes from '../constants/routes';
+import { history } from '../helpers';
+import { browserHistory } from 'react-router';
 import { ARTIST, ALBUM, TRACK } from '../constants';
 import {
   TabContent,
@@ -14,7 +16,11 @@ import {
   Col,
   Input,
   ListGroup,
-  ListGroupItem
+  ListGroupItem,
+  Modal,
+  ModalHeader,
+  ModalBody,
+  ModalFooter
 } from 'reactstrap';
 import classnames from 'classnames';
 import { userActions } from '../actions';
@@ -24,12 +30,22 @@ import styles from './HomePage.css';
 
 function DataList(props) {
   const names = props.names;
+  let addButton = props.addButton;
   const listItems = names.rows.map((name, index) => {
     return <ListGroupItem key={name + index}>{name}</ListGroupItem>;
+    {
+      addButton ? (
+        <button className="btn-xs btn btn-primary pull-right">
+          Add to playlist
+        </button>
+      ) : null;
+    }
   });
   return (
     <div>
-      <ListGroup>{listItems}</ListGroup>
+      <ListGroup>
+        <Link to="/track">{listItems}</Link>
+      </ListGroup>
       <DataPagination itemsLength={names.count} name={names.name} />
     </div>
   );
@@ -197,6 +213,9 @@ class HomePage extends React.Component {
             <Row>
               <Col sm="12">
                 <div className="text-right">
+                  <Link to={routes.PLAYLIST_REPORT}>
+                    <Button color="warning">Playlist Report</Button>
+                  </Link>
                   <Link to={routes.NEW_PLAYLIST} className="btn btn-link">
                     <Button color="primary">Add Playlist</Button>
                   </Link>
