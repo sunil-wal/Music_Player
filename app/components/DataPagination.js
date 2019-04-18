@@ -12,22 +12,31 @@ class DataPagination extends React.Component {
     this.itemsLength = this.props.itemsLength;
 
     this.pageSize = 5;
-    this.pagesCount = Math.ceil(this.itemsLength / this.pageSize);
 
     this.handlePageChange = this.handlePageChange.bind(this);
     this.state = {
-      currentPage: 0
+      currentPage: 0,
+      pagesCount: Math.ceil(this.itemsLength / this.pageSize)
     };
+  }
+  componentDidUpdate(prevProps, prevState) {
+    // only update chart if the data has changed
+    if (prevProps.itemsLength !== this.props.itemsLength) {
+      this.setState({
+        pagesCount: Math.ceil(this.props.itemsLength / this.pageSize)
+      });
+    }
   }
   handlePageChange(e, index) {
     e.preventDefault();
-    this.props.loadData(index, this.props.name);
+    this.props.loadData(index + 1, this.props.name);
     this.setState({
       currentPage: index
     });
   }
   render() {
     const { currentPage } = this.state;
+
     return (
       <div>
         <Pagination aria-label="Page navigation example">
@@ -39,7 +48,7 @@ class DataPagination extends React.Component {
             />
           </PaginationItem>
 
-          {[...Array(this.pagesCount)].map((page, i) => (
+          {[...Array(this.state.pagesCount)].map((page, i) => (
             <PaginationItem active={i === currentPage} key={i}>
               <PaginationLink
                 onClick={e => this.handlePageChange(e, i)}
@@ -50,7 +59,7 @@ class DataPagination extends React.Component {
             </PaginationItem>
           ))}
 
-          <PaginationItem disabled={currentPage >= this.pagesCount - 1}>
+          <PaginationItem disabled={currentPage >= this.state.pagesCount - 1}>
             <PaginationLink
               onClick={e => this.handlePageChange(e, currentPage + 1)}
               next
