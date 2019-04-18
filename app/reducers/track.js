@@ -11,7 +11,21 @@ const track = (state = {}, action) => {
       return {
         ...state
       };
+    case TRACK.SUCCESS:
+      const { rows, count } = action.track;
 
+      return {
+        ...state,
+        allTrack: { rows: rows.map(data => data.name), count }
+      };
+
+    case TRACK.ERROR:
+      const errorMessage = action.message;
+
+      return {
+        ...state,
+        message: errorMessage
+      };
     default:
       return state;
   }

@@ -3,11 +3,11 @@ import { ARTIST } from '../constants/types';
 const artist = (state = {}, action) => {
   switch (action.type) {
     case ARTIST.SAVE_SUCCESS:
-      const { message } = action;
+      const { success } = action;
 
       return {
         ...state,
-        message
+        success
       };
 
     case ARTIST.SAVE_ERROR:
@@ -16,7 +16,21 @@ const artist = (state = {}, action) => {
       return {
         ...state
       };
+    case ARTIST.SUCCESS:
+      const { rows, count } = action.artist;
 
+      return {
+        ...state,
+        allArtist: { rows: rows.map(data => data.name), count }
+      };
+
+    case ARTIST.ERROR:
+      const errorMessage = action.message;
+
+      return {
+        ...state,
+        message: errorMessage
+      };
     default:
       return state;
   }

@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
 import { Button, Form, FormGroup, Label, Input, Alert } from 'reactstrap';
+import { Redirect } from 'react-router-dom';
 import styles from './CreateArtist.css';
 
 class CreateArtist extends Component {
   state = {
-    artistName: ''
+    name: ''
   };
 
   saveArtist = e => {
@@ -12,7 +13,7 @@ class CreateArtist extends Component {
     this.props.createArtist(this.state);
 
     this.setState({
-      artistName: ''
+      name: ''
     });
   };
 
@@ -24,23 +25,24 @@ class CreateArtist extends Component {
   };
 
   render() {
-    const { message } = this.props.artist;
+    const { success } = this.props.artist;
+
     return (
       <div className={styles.newArtistContainer}>
-        {message ? <Alert color="success">{message}</Alert> : null}
+        {success ? <Redirect to={{ pathname: '/home' }} /> : null}
         <h2 className={styles.newArtistTitle}>New Artist</h2>
         <Form onSubmit={this.saveArtist}>
           <FormGroup>
             <Label for="artist-name">Artist Name</Label>
             <Input
               type="text"
-              name="artistName"
+              name="name"
               id="artist-name"
-              value={this.state.artistName}
+              value={this.state.name}
               onChange={this.changeHandler}
             />
           </FormGroup>
-          <Button>Save</Button>
+          <Button color="primary">Save</Button>
         </Form>
       </div>
     );
