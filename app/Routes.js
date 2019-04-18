@@ -11,6 +11,7 @@ import CreatePlaylist from './containers/NewPlaylistPage';
 import PlaylistsPage from './containers/PlaylistsPage';
 import RegisterPage from './containers/RegisterPage';
 import Track from './components/Track';
+import ReportPlaylist from './containers/ReportPlaylist';
 // {isLoggedIn ? null : <Redirect to={routes.HOME} />}
 // <Route path={routes.HOME} component={HomePage} />
 class Routes extends Component {
@@ -34,6 +35,10 @@ class Routes extends Component {
                   <Route path={routes.COUNTER} component={CounterPage} />
                   <Route path={routes.NEW_ALBUM} component={NewAlbumPage} />
                   <Route path={routes.NEW_ARTIST} component={NewArtistPage} />
+                  <Route
+                    path={routes.PLAYLIST_REPORT}
+                    component={ReportPlaylist}
+                  />
                   <Route
                     path={routes.NEW_PLAYLIST}
                     component={CreatePlaylist}

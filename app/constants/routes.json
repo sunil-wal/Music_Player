@@ -8,5 +8,6 @@
   "NEW_PLAYLIST": "/new-playlist",
   "NEW_TRACK": "/new-track",
   "PLAYLISTS": "/playlists",
-  "TRACK": "/track"
+  "TRACK": "/track",
+  "PLAYLIST_REPORT": "/playlistReport"
 }
