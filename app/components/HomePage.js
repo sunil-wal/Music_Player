@@ -15,7 +15,11 @@ import {
   Col,
   Input,
   ListGroup,
-  ListGroupItem
+  ListGroupItem,
+  Modal,
+  ModalHeader,
+  ModalBody,
+  ModalFooter
 } from 'reactstrap';
 import classnames from 'classnames';
 import { userActions } from '../actions';
