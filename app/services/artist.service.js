@@ -1,8 +1,11 @@
 import axios from './http.service';
 
-export const getArtists = async () => {
+export const getArtists = async (offset = 0) => {
   let response = await axios({
-    url: '/artists'
+    url: '/artists',
+    params: {
+      offset
+    }
   });
 
   return response.data.artists;

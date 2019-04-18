@@ -30,7 +30,7 @@ function DataList(props) {
   return (
     <div>
       <ListGroup>{listItems}</ListGroup>
-      <DataPagination itemsLength={names.count} />
+      <DataPagination itemsLength={names.count} name={names.name} />
     </div>
   );
 }
