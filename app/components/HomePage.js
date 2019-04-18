@@ -46,7 +46,7 @@ function DataList(props) {
       <ListGroup>
         <Link to="/track">{listItems}</Link>
       </ListGroup>
-      <DataPagination itemsLength={names.count} />
+      <DataPagination itemsLength={names.count} name={names.name} />
     </div>
   );
 }

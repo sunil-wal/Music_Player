@@ -1,7 +1,10 @@
 import React from 'react';
 import { Pagination, PaginationItem, PaginationLink } from 'reactstrap';
 import classnames from 'classnames';
+import { connect } from 'react-redux';
 import { userActions } from '../actions';
+import { ARTIST, ALBUM, TRACK } from '../constants';
+import { getAlbum, getArtists, getTracks } from '../services';
 
 class DataPagination extends React.Component {
   constructor(props) {
@@ -18,7 +21,7 @@ class DataPagination extends React.Component {
   }
   handlePageChange(e, index) {
     e.preventDefault();
-
+    this.props.loadData(index, this.props.name);
     this.setState({
       currentPage: index
     });
@@ -59,4 +62,58 @@ class DataPagination extends React.Component {
     );
   }
 }
-export default DataPagination;
+function mapStateToProps(state) {
+  return {
+    state
+  };
+}
+
+function mapDispatchToProps(dispatch) {
+  return {
+    loadData(offset, name) {
+      if (name === 'artists') {
+        this.loadArtists(offset);
+      } else if (name === 'albums') {
+        this.loadAlbum(offset);
+      } else if (name === 'tracks') {
+        this.loadTracks(offset);
+      }
+    },
+
+    loadAlbum(offset) {
+      return async () => {
+        try {
+          let album = await getAlbum(offset);
+          dispatch({ type: ALBUM.SUCCESS, album });
+        } catch (error) {
+          dispatch({ type: ALBUM.ERROR, message: error.message });
+        }
+      };
+    },
+    loadArtists(offset) {
+      return async () => {
+        try {
+          let artist = await getArtists(offset);
+          dispatch({ type: ARTIST.SUCCESS, artist });
+        } catch (error) {
+          dispatch({ type: ARTIST.ERROR, message: error.message });
+        }
+      };
+    },
+    loadTracks(offset) {
+      return async () => {
+        try {
+          let track = await getTracks(offset);
+          dispatch({ type: TRACK.SUCCESS, track });
+        } catch (error) {
+          dispatch({ type: TRACK.ERROR, message: error.message });
+        }
+      };
+    }
+  };
+}
+// export default DataPagination;
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(DataPagination);
