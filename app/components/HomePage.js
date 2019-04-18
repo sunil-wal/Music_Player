@@ -32,20 +32,22 @@ function DataList(props) {
   const names = props.names;
   let addButton = props.addButton;
   const listItems = names.rows.map((name, index) => {
-    return <ListGroupItem key={name + index}>{name}</ListGroupItem>;
-    {
-      addButton ? (
-        <button className="btn-xs btn btn-primary pull-right">
-          Add to playlist
-        </button>
-      ) : null;
-    }
+    return (
+      <div>
+        <Link to="/track">
+          <ListGroupItem key={name + index}>
+            {name}
+            {addButton ? (
+              <button className="btn-xs btn btn-primary pull-right">+</button>
+            ) : null}
+          </ListGroupItem>
+        </Link>
+      </div>
+    );
   });
   return (
     <div>
-      <ListGroup>
-        <Link to="/track">{listItems}</Link>
-      </ListGroup>
+      <ListGroup>{listItems}</ListGroup>
       <DataPagination itemsLength={names.count} name={names.name} />
     </div>
   );

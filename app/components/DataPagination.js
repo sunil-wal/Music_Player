@@ -80,8 +80,8 @@ function mapDispatchToProps(dispatch) {
       }
     },
 
-    loadAlbum(offset) {
-      return async () => {
+    get loadAlbum() {
+      return async offset => {
         try {
           let album = await getAlbum(offset);
           dispatch({ type: ALBUM.SUCCESS, album });
@@ -90,8 +90,8 @@ function mapDispatchToProps(dispatch) {
         }
       };
     },
-    loadArtists(offset) {
-      return async () => {
+    get loadArtists() {
+      return async offset => {
         try {
           let artist = await getArtists(offset);
           dispatch({ type: ARTIST.SUCCESS, artist });
@@ -100,8 +100,8 @@ function mapDispatchToProps(dispatch) {
         }
       };
     },
-    loadTracks(offset) {
-      return async () => {
+    get loadTracks() {
+      return async offset => {
         try {
           let track = await getTracks(offset);
           dispatch({ type: TRACK.SUCCESS, track });
