@@ -18,7 +18,14 @@ const track = (state = {}, action) => {
 
       return {
         ...state,
-        allTrack: { rows: rows.map(data => data.name), count, name: 'tracks' }
+        allTrack: {
+          rows: rows.map(data => ({
+            name: data.name,
+            id: data.id
+          })),
+          count,
+          name: 'tracks'
+        }
       };
 
     case TRACK.ERROR:

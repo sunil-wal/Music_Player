@@ -11,3 +11,13 @@ export const getPlaylists = async (page = 1, searchText = '') => {
 
   return response.data.result;
 };
+
+export const addTrackToPlaylist = async (id, data) => {
+  let response = await axios({
+    method: 'put',
+    url: `/playlists/${id}`,
+    data: { trackIds: data }
+  });
+
+  return response.data;
+};

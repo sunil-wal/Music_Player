@@ -21,7 +21,13 @@ const artist = (state = {}, action) => {
 
       return {
         ...state,
-        allArtist: { rows: rows.map(data => data.name), count, name: 'artists' }
+        allArtist: {
+          rows: rows.map(data => ({
+            name: data.name
+          })),
+          count,
+          name: 'artists'
+        }
       };
 
     case ARTIST.ERROR:

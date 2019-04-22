@@ -8,7 +8,10 @@ export const updatePlaylists = (state = {}, action) => {
       return {
         ...state,
         allPlaylists: {
-          rows: playlists.rows.map(data => data.name),
+          rows: playlists.rows.map(data => ({
+            name: data.name,
+            id: data.id
+          })),
           count: playlists.count,
           name: 'playlists'
         }
