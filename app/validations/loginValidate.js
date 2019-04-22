@@ -10,10 +10,10 @@ function loginValidation(event) {
       ...data,
       error: 'Password is required'
     };
-  } else if (event.password.length < 5) {
+  } else if (event.password.length < 4) {
     data = {
       ...data,
-      error: 'Password should not be less than length of 5'
+      error: 'Password should not be less than length of 4'
     };
   } else if (event.username.length > 0) {
     data = {

@@ -3,8 +3,8 @@ import { Pagination, PaginationItem, PaginationLink } from 'reactstrap';
 import classnames from 'classnames';
 import { connect } from 'react-redux';
 import { userActions } from '../actions';
-import { ARTIST, ALBUM, TRACK } from '../constants';
-import { getAlbum, getArtists, getTracks } from '../services';
+import { ARTIST, ALBUM, TRACK, PLAYLIST } from '../constants';
+import { getAlbum, getArtists, getTracks, getPlaylists } from '../services';
 
 class DataPagination extends React.Component {
   constructor(props) {
@@ -86,6 +86,8 @@ function mapDispatchToProps(dispatch) {
         this.loadAlbum(offset);
       } else if (name === 'tracks') {
         this.loadTracks(offset);
+      } else if (name === 'playlists') {
+        this.loadPlaylists(offset);
       }
     },
 
@@ -116,6 +118,16 @@ function mapDispatchToProps(dispatch) {
           dispatch({ type: TRACK.SUCCESS, track });
         } catch (error) {
           dispatch({ type: TRACK.ERROR, message: error.message });
+        }
+      };
+    },
+    get loadPlaylists() {
+      return async offset => {
+        try {
+          let playlists = await getPlaylists(offset);
+          dispatch({ type: PLAYLIST.SUCCESS, playlists });
+        } catch (error) {
+          dispatch({ type: PLAYLIST.ERROR, message: error.message });
         }
       };
     }

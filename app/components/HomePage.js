@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import routes from '../constants/routes';
 import { history } from '../helpers';
 import { browserHistory } from 'react-router';
-import { ARTIST, ALBUM, TRACK } from '../constants';
+import { ARTIST, ALBUM, TRACK, PLAYLIST } from '../constants';
 import {
   TabContent,
   TabPane,
@@ -25,7 +25,7 @@ import {
 import classnames from 'classnames';
 import { userActions } from '../actions';
 import DataPagination from './DataPagination';
-import { getAlbum, getArtists, getTracks } from '../services';
+import { getAlbum, getArtists, getTracks, getPlaylists } from '../services';
 import styles from './HomePage.css';
 import SearchPage from './search/SearchPage';
 
@@ -88,7 +88,13 @@ class HomePage extends React.Component {
   }
 
   render() {
-    const { authentication, allArtist, allAlbum, allTrack } = this.props;
+    const {
+      authentication,
+      allArtist,
+      allAlbum,
+      allTrack,
+      allPlaylists
+    } = this.props;
     return (
       <div id={styles.homePage}>
         <div className="text-right">
@@ -219,6 +225,13 @@ class HomePage extends React.Component {
                     <Button color="primary">Add Playlist</Button>
                   </Link>
                 </div>
+                <div>
+                  {allPlaylists ? (
+                    <DataList names={allPlaylists} addButton={false} />
+                  ) : (
+                    ''
+                  )}
+                </div>
               </Col>
             </Row>
           </TabPane>
@@ -228,11 +241,12 @@ class HomePage extends React.Component {
   }
 }
 function mapStateToProps(state) {
-  const { authentication, artist, album, track } = state;
+  const { authentication, artist, album, track, updatePlaylists } = state;
   return {
     authentication,
     allArtist: artist.allArtist,
     allAlbum: album.allAlbum,
+    allPlaylists: updatePlaylists.allPlaylists,
     allTrack: track.allTrack
   };
 }
@@ -244,6 +258,7 @@ function mapDispatchToProps(dispatch) {
       this.loadAlbum();
       this.loadArtists();
       this.loadTracks();
+      this.loadPlaylists();
     },
 
     get loadAlbum() {
@@ -273,6 +288,16 @@ function mapDispatchToProps(dispatch) {
           dispatch({ type: TRACK.SUCCESS, track });
         } catch (error) {
           dispatch({ type: TRACK.ERROR, message: error.message });
+        }
+      };
+    },
+    get loadPlaylists() {
+      return async () => {
+        try {
+          let playlists = await getPlaylists();
+          dispatch({ type: PLAYLIST.SUCCESS, playlists });
+        } catch (error) {
+          dispatch({ type: PLAYLIST.ERROR, message: error.message });
         }
       };
     },
