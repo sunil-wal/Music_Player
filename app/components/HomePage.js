@@ -20,7 +20,8 @@ import {
   Modal,
   ModalHeader,
   ModalBody,
-  ModalFooter
+  ModalFooter,
+  Container
 } from 'reactstrap';
 import classnames from 'classnames';
 import { userActions } from '../actions';
@@ -28,22 +29,31 @@ import DataPagination from './DataPagination';
 import { getAlbum, getArtists, getTracks, getPlaylists } from '../services';
 import styles from './HomePage.css';
 import SearchPage from './search/SearchPage';
+import SelectPlaylist from './modals/SelectPlaylist';
 
 function DataList(props) {
   const names = props.names;
   let addButton = props.addButton;
-  const listItems = names.rows.map((name, index) => {
+  const listItems = names.rows.map((data, index) => {
     return (
-      <div>
-        <Link to="/track">
-          <ListGroupItem key={name + index}>
-            {name}
-            {addButton ? (
-              <button className="btn-xs btn btn-primary pull-right">+</button>
-            ) : null}
-          </ListGroupItem>
-        </Link>
-      </div>
+      <Row>
+        <Col xs="11">
+          <Link to="/track">
+            <ListGroupItem key={data.name + index}>{data.name}</ListGroupItem>
+          </Link>
+        </Col>
+        <Col xs="1">
+          {' '}
+          {addButton ? (
+            <button
+              className="btn-xs btn btn-primary pull-right"
+              onClick={() => props.addSongFun(data.id)}
+            >
+              +
+            </button>
+          ) : null}
+        </Col>
+      </Row>
     );
   });
   return (
@@ -67,6 +77,7 @@ class HomePage extends React.Component {
 
     this.handleToggle = this.handleToggle.bind(this);
     this.handleLogout = this.handleLogout.bind(this);
+    this.handleAddSong = this.handleAddSong.bind(this);
     this.state = {
       activeTab: '1'
     };
@@ -85,6 +96,10 @@ class HomePage extends React.Component {
   }
   handleLogout() {
     this.props.logout();
+  }
+  handleAddSong(id) {
+    console.log('ha', id);
+    this.props.addSong(id);
   }
 
   render() {
@@ -190,7 +205,15 @@ class HomePage extends React.Component {
                 ) : (
                   ''
                 )}
-                {allAlbum ? <DataList names={allAlbum} addButton={true} /> : ''}
+                {allAlbum ? (
+                  <DataList
+                    names={allAlbum}
+                    addButton={true}
+                    addSongFun={this.handleAddSong}
+                  />
+                ) : (
+                  ''
+                )}
               </Col>
             </Row>
           </TabPane>
@@ -210,7 +233,15 @@ class HomePage extends React.Component {
                 ) : (
                   ''
                 )}
-                {allTrack ? <DataList names={allTrack} addButton={true} /> : ''}
+                {allTrack ? (
+                  <DataList
+                    names={allTrack}
+                    addButton={true}
+                    addSongFun={this.handleAddSong}
+                  />
+                ) : (
+                  ''
+                )}
               </Col>
             </Row>
           </TabPane>
@@ -236,24 +267,37 @@ class HomePage extends React.Component {
             </Row>
           </TabPane>
         </TabContent>
+        {this.props.modifyPlaylist.openModal ? <SelectPlaylist /> : ''}
       </div>
     );
   }
 }
 function mapStateToProps(state) {
-  const { authentication, artist, album, track, updatePlaylists } = state;
+  const {
+    authentication,
+    artist,
+    album,
+    track,
+    updatePlaylists,
+    modifyPlaylist
+  } = state;
   return {
     authentication,
     allArtist: artist.allArtist,
     allAlbum: album.allAlbum,
     allPlaylists: updatePlaylists.allPlaylists,
-    allTrack: track.allTrack
+    allTrack: track.allTrack,
+    modifyPlaylist
   };
 }
 
 function mapDispatchToProps(dispatch) {
   return {
     clearData: () => {},
+    addSong: id => {
+      console.log(id);
+      dispatch({ type: 'ADDSONGBYID', payload: { id, openModal: true } });
+    },
     loadData() {
       this.loadAlbum();
       this.loadArtists();
