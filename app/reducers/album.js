@@ -5,7 +5,7 @@ const album = (state = {}, action) => {
     case ALBUM.SAVE_SUCCESS:
       return {
         ...state,
-        message: action.message
+        success: action.success
       };
 
     case ALBUM.SAVE_ERROR:
@@ -30,11 +30,11 @@ const album = (state = {}, action) => {
       };
 
     case ALBUM.ERROR:
-      const errorMessage = action.message;
+      const errorMessage = action.success;
 
       return {
         ...state,
-        message: errorMessage
+        success: errorMessage
       };
     default:
       return state;

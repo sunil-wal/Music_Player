@@ -4,12 +4,14 @@ const track = (state = {}, action) => {
   switch (action.type) {
     case TRACK.SAVE_SUCCESS:
       return {
-        ...state
+        ...state,
+        success: action.success
       };
 
     case TRACK.SAVE_ERROR:
       return {
-        ...state
+        ...state,
+        success: action.success
       };
     case TRACK.SUCCESS:
       const { rows, count } = action.track;
