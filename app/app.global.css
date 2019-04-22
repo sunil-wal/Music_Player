@@ -37,3 +37,9 @@ a:hover {
   text-decoration: none;
   cursor: pointer;
 }
+
+.btn-back {
+  margin: 20px;
+  background: #fff;
+  color: #383d41;
+}
