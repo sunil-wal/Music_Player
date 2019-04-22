@@ -1,0 +1,12 @@
+.newArtistContainer {
+  margin: 0 auto;
+  width: 400px;
+  padding: 30px;
+  margin-top: 100px;
+  background-color: #fff;
+  border-radius: 0.25rem;
+}
+
+.newArtistTitle {
+  margin-bottom: 2rem;
+}

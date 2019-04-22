@@ -256,6 +256,9 @@
   },
   "dependencies": {
     "@fortawesome/fontawesome-free": "^5.8.1",
+    "axios": "^0.18.0",
+    "bootstrap": "^4.3.1",
+    "classnames": "^2.2.6",
     "connected-react-router": "^6.3.2",
     "core-js": "2",
     "devtron": "^1.4.0",
@@ -269,7 +272,9 @@
     "react-redux": "^6.0.1",
     "react-router": "^5.0.0",
     "react-router-dom": "^5.0.0",
+    "reactstrap": "^8.0.0",
     "redux": "^4.0.1",
+    "redux-devtools-extension": "^2.13.8",
     "redux-thunk": "^2.3.0",
     "source-map-support": "^0.5.11"
   },
@@ -282,9 +287,5 @@
     "url": "https://opencollective.com/electron-react-boilerplate-594"
   },
   "browserslist": "electron 1.6",
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged"
-    }
-  }
+  "husky": {}
 }
