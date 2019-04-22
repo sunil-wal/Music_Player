@@ -31,8 +31,10 @@ class CreateTrack extends Component {
   };
 
   render() {
+    const { success } = this.props.track;
     return (
       <div className={styles.newTrackContainer}>
+        {success ? <Redirect to={{ pathname: '/home' }} /> : null}
         <h2 className={styles.newTrackTitle}>New Track</h2>
         <Form onSubmit={this.saveTrack}>
           <FormGroup>

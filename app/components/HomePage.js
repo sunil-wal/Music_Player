@@ -27,26 +27,29 @@ import { userActions } from '../actions';
 import DataPagination from './DataPagination';
 import { getAlbum, getArtists, getTracks } from '../services';
 import styles from './HomePage.css';
+import SearchPage from './search/SearchPage';
 
 function DataList(props) {
   const names = props.names;
   let addButton = props.addButton;
   const listItems = names.rows.map((name, index) => {
-    return <ListGroupItem key={name + index}>{name}</ListGroupItem>;
-    {
-      addButton ? (
-        <button className="btn-xs btn btn-primary pull-right">
-          Add to playlist
-        </button>
-      ) : null;
-    }
+    return (
+      <div>
+        <Link to="/track">
+          <ListGroupItem key={name + index}>
+            {name}
+            {addButton ? (
+              <button className="btn-xs btn btn-primary pull-right">+</button>
+            ) : null}
+          </ListGroupItem>
+        </Link>
+      </div>
+    );
   });
   return (
     <div>
-      <ListGroup>
-        <Link to="/track">{listItems}</Link>
-      </ListGroup>
-      <DataPagination itemsLength={names.count} />
+      <ListGroup>{listItems}</ListGroup>
+      <DataPagination itemsLength={names.count} name={names.name} />
     </div>
   );
 }
@@ -64,10 +67,8 @@ class HomePage extends React.Component {
 
     this.handleToggle = this.handleToggle.bind(this);
     this.handleLogout = this.handleLogout.bind(this);
-    this.handleSearch = this.handleSearch.bind(this);
     this.state = {
-      activeTab: '1',
-      searchText: ''
+      activeTab: '1'
     };
   }
   componentDidMount() {
@@ -83,12 +84,7 @@ class HomePage extends React.Component {
     }
   }
   handleLogout() {
-    this.props.dispatch(userActions.logout());
-  }
-  handleSearch(event) {
-    this.setState({
-      searchText: event.target.value
-    });
+    this.props.logout();
   }
 
   render() {
@@ -99,15 +95,6 @@ class HomePage extends React.Component {
           <Button color="primary" onClick={this.handleLogout}>
             Logout
           </Button>
-        </div>
-        <br />
-        <div>
-          <Input
-            type="text"
-            placeholder="Search..."
-            value={this.state.searchText}
-            onChange={this.handleSearch}
-          />
         </div>
         <br />
         <Nav tabs>
@@ -165,10 +152,14 @@ class HomePage extends React.Component {
             <Row>
               <Col sm="12">
                 {authentication.isAdmin ? (
-                  <div className="text-right">
-                    <Link to={routes.NEW_ARTIST} className="btn btn-link">
-                      <Button color="primary">Add Artist</Button>
-                    </Link>
+                  <div>
+                    <br />
+                    <SearchPage name="artists" />
+                    <div className="text-right">
+                      <Link to={routes.NEW_ARTIST} className="btn btn-link">
+                        <Button color="primary">Add Artist</Button>
+                      </Link>
+                    </div>
                   </div>
                 ) : (
                   ''
@@ -181,10 +172,14 @@ class HomePage extends React.Component {
             <Row>
               <Col sm="12">
                 {authentication.isAdmin ? (
-                  <div className="text-right">
-                    <Link to={routes.NEW_ALBUM} className="btn btn-link">
-                      <Button color="primary">Add Album</Button>
-                    </Link>
+                  <div>
+                    <br />
+                    <SearchPage name="albums" />
+                    <div className="text-right">
+                      <Link to={routes.NEW_ALBUM} className="btn btn-link">
+                        <Button color="primary">Add Album</Button>
+                      </Link>
+                    </div>
                   </div>
                 ) : (
                   ''
@@ -197,10 +192,14 @@ class HomePage extends React.Component {
             <Row>
               <Col sm="12">
                 {authentication.isAdmin ? (
-                  <div className="text-right">
-                    <Link to={routes.NEW_TRACK} className="btn btn-link">
-                      <Button color="primary">Add Track</Button>
-                    </Link>
+                  <div>
+                    <br />
+                    <SearchPage name="tracks" />
+                    <div className="text-right">
+                      <Link to={routes.NEW_TRACK} className="btn btn-link">
+                        <Button color="primary">Add Track</Button>
+                      </Link>
+                    </div>
                   </div>
                 ) : (
                   ''
@@ -276,6 +275,9 @@ function mapDispatchToProps(dispatch) {
           dispatch({ type: TRACK.ERROR, message: error.message });
         }
       };
+    },
+    logout: () => {
+      dispatch(userActions.logout());
     }
   };
 }

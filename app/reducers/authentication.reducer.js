@@ -1,4 +1,5 @@
 import { userConstants } from '../constants';
+import loginValidation from '../validations/loginValidate';
 
 let addButton = false;
 
@@ -31,6 +32,11 @@ export function authentication(state = initialState, action) {
         ...state,
         isAdmin: action.user.userRole == 'admin' ? true : false,
         isLoggedIn: false
+      };
+    case 'LOGIN_VALIDATE':
+      return {
+        ...state,
+        ...loginValidation(action.payload)
       };
     case userConstants.LOGOUT:
       return {

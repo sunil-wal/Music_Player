@@ -1,8 +1,12 @@
 import axios from './http.service';
 
-export const getArtists = async () => {
+export const getArtists = async (page = 1, searchText = '') => {
   let response = await axios({
-    url: '/artists'
+    url: '/artists',
+    params: {
+      page,
+      searchText
+    }
   });
 
   return response.data.artists;
