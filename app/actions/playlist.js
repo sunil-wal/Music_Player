@@ -1,5 +1,6 @@
 import { PLAYLIST } from '../constants/types';
 import * as axios from 'axios';
+import { authHeader } from '../helpers';
 
 export const getPlaylistsSuccess = playlists => {
   return { type: PLAYLIST.SUCCESS, playlists };
@@ -10,8 +11,11 @@ export const getPlaylistsError = error => {
 };
 
 export const getPlaylists = () => dispatch => {
+  const config = {
+    headers: authHeader()
+  };
   return axios
-    .get('http://localhost:3000/playlists')
+    .get('https://musicplayer-api-wal.herokuapp.com/api/v1/playlists', config)
     .then(json => {
       dispatch(getPlaylistsSuccess(json.data.playlists));
     })
@@ -28,8 +32,15 @@ export const createPlaylistError = error => {
 };
 
 export const createPlaylist = payload => dispatch => {
+  const config = {
+    headers: authHeader()
+  };
   return axios
-    .post('https://musicplayer-api-wal.herokuapp.com/api/v1/playlist', payload)
+    .post(
+      'https://musicplayer-api-wal.herokuapp.com/api/v1/playlists',
+      payload,
+      config
+    )
     .then(json => {
       dispatch(createPlaylistSuccess(json.data.message));
     })

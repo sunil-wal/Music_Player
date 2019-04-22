@@ -7,7 +7,11 @@ export const updatePlaylists = (state = {}, action) => {
 
       return {
         ...state,
-        playlists
+        allPlaylists: {
+          rows: playlists.rows.map(data => data.name),
+          count: playlists.count,
+          name: 'playlists'
+        }
       };
 
     case PLAYLIST.ERROR:
@@ -44,5 +48,3 @@ export const newPlaylists = (state = {}, action) => {
       return state;
   }
 };
-
-
