@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Button, Form, FormGroup, Label, Input, Alert } from 'reactstrap';
 import { Link } from 'react-router-dom';
 import routes from '../../constants/routes';
+import styles from './Playlists.css';
 
 class CreatePlaylist extends Component {
   state = {
@@ -10,7 +11,7 @@ class CreatePlaylist extends Component {
 
   savePlaylist = e => {
     e.preventDefault();
-    this.props.createPlaylist(this.state);
+    this.props.createPlaylist({ name: this.state.playlistName });
 
     this.setState({
       playlistName: ''
@@ -18,20 +19,19 @@ class CreatePlaylist extends Component {
   };
 
   changeHandler = e => {
-    const name = e.target.name;
     const value = e.target.value;
 
-    this.setState({ [name]: value });
+    this.setState({ playlistName: value });
   };
 
   render() {
     const { message } = this.props.newPlaylists;
     return (
-      <div>
+      <div className={styles.playlistsContainer}>
         <div className="text-left">
-                    <Link to={routes.HOME}>
-                    <Button color="primary"> Back </Button>
-                    </Link>
+          <Link to={routes.HOME}>
+            <Button color="primary"> Back </Button>
+          </Link>
         </div>
         {message ? <Alert color="success">{message}</Alert> : null}
         <h3>New Playlist</h3>

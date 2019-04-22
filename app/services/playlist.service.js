@@ -1,13 +1,13 @@
 import axios from './http.service';
 
-export const getTracks = async (page = 1, searchText = '') => {
+export const getPlaylists = async (page = 1, searchText = '') => {
   let response = await axios({
-    url: '/tracks',
+    url: '/playlists',
     params: {
       page,
       searchText
     }
   });
 
-  return response.data.tracks;
+  return response.data.result;
 };

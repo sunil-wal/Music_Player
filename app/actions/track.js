@@ -14,7 +14,6 @@ export const createTrack = payload => dispatch => {
   const config = {
     headers: authHeader()
   };
-
   return axios
     .post(
       'https://musicplayer-api-wal.herokuapp.com/api/v1/tracks',

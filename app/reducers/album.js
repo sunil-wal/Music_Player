@@ -19,7 +19,7 @@ const album = (state = {}, action) => {
 
       return {
         ...state,
-        allAlbum: { rows: rows.map(data => data.name), count }
+        allAlbum: { rows: rows.map(data => data.name), count, name: 'albums' }
       };
 
     case ALBUM.ERROR:

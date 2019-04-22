@@ -19,10 +19,7 @@ import {
   FormText
 } from 'reactstrap';
 
-//type Props = {};
-
 class Register extends React.Component {
-  //props: Props;
   constructor(props) {
     super(props);
 
