@@ -157,7 +157,7 @@ class HomePage extends React.Component {
           <TabPane tabId="1">
             <Row>
               <Col sm="12">
-                {authentication.isAdmin ? (
+                {true ? (
                   <div className="text-right">
                     <Link to={routes.NEW_ARTIST} className="btn btn-link">
                       <Button color="primary">Add Artist</Button>
@@ -173,7 +173,7 @@ class HomePage extends React.Component {
           <TabPane tabId="2">
             <Row>
               <Col sm="12">
-                {authentication.isAdmin ? (
+                {true ? (
                   <div className="text-right">
                     <Link to={routes.NEW_ALBUM} className="btn btn-link">
                       <Button color="primary">Add Album</Button>
@@ -189,7 +189,7 @@ class HomePage extends React.Component {
           <TabPane tabId="3">
             <Row>
               <Col sm="12">
-                {authentication.isAdmin ? (
+                {true ? (
                   <div className="text-right">
                     <Link to={routes.NEW_TRACK} className="btn btn-link">
                       <Button color="primary">Add Track</Button>
