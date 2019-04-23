@@ -23,7 +23,8 @@ const artist = (state = {}, action) => {
         ...state,
         allArtist: {
           rows: rows.map(data => ({
-            name: data.name
+            name: data.name,
+            id: data.id
           })),
           count,
           name: 'artists'

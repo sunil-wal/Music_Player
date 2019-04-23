@@ -4,9 +4,9 @@ import counter from './counter';
 import register from './register';
 import { authentication } from './authentication.reducer';
 import { updatePlaylists, newPlaylists } from './playlist';
-import album from './album';
+import { album, tracksByAlbumId } from './album';
 import artist from './artist';
-import track from './track';
+import { track, trackByPlaylistId } from './track';
 import modifyPlaylist from './modifyPlaylist.reducer';
 
 const rootReducer = combineReducers({
@@ -18,7 +18,9 @@ const rootReducer = combineReducers({
   album,
   artist,
   track,
-  modifyPlaylist
+  modifyPlaylist,
+  trackByPlaylistId,
+  tracksByAlbumId
 });
 
 export default rootReducer;
