@@ -1,9 +1,11 @@
 import { ARTISTALBUM } from '../constants/types';
-const artistAlbums = (state = {}, action) => {
+const artistAlbums = (state = { albumsByArtist: [] }, action) => {
   switch (action.type) {
     case ARTISTALBUM.SUCCESS:
+      //console.log('payload in reducer', action.payload);
       return {
-        ...state
+        ...state,
+        albumsByArtist: action.payload
       };
 
     case ARTISTALBUM.ERROR:
