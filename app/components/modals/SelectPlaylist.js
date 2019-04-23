@@ -11,7 +11,7 @@ import {
   DropdownMenu,
   DropdownItem
 } from 'reactstrap';
-import { addTrackToPlaylist } from '../../services';
+import { addTrackToPlaylist, getAlbumTracks } from '../../services';
 import { AST_False } from 'terser';
 
 class SelectPlaylist extends React.Component {
@@ -19,7 +19,8 @@ class SelectPlaylist extends React.Component {
     super(props);
     this.state = {
       dropdownOpen: false,
-      selectedPlaylistId: ''
+      selectedPlaylistId: '',
+      previousTracks: []
     };
 
     this.toggle = this.toggle.bind(this);
@@ -27,12 +28,23 @@ class SelectPlaylist extends React.Component {
     this.onDropdownItemClick = this.onDropdownItemClick.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
+  componentDidMount() {
+    if (this.props.type === 'albums') {
+      console.log('in');
+      this.props.getTracksById(this.props.id);
+    }
+  }
   toggle() {
     this.props.updateModalState();
   }
   handleSubmit() {
-    const ids = [];
-    ids.push(this.props.id);
+    const ids = this.state.previousTracks;
+    if (this.props.type === 'albums') {
+      console.log('ins');
+      ids.push(...this.props.trackIds);
+    } else {
+      ids.push(this.props.id);
+    }
     this.props.addSongToPlaylist(this.state.selectedPlaylistId, ids);
     this.toggle();
   }
@@ -43,9 +55,15 @@ class SelectPlaylist extends React.Component {
   }
   onDropdownItemClick(e) {
     let id = e.currentTarget.getAttribute('id');
+    let index = e.currentTarget.getAttribute('index');
     console.log(id);
+    console.log('iind ', index);
+    const tracks = this.props.allPlaylists.rows[index].playlistTracks.map(
+      data => data.id
+    );
     this.setState(prevState => ({
-      selectedPlaylistId: id
+      selectedPlaylistId: id,
+      previousTracks: tracks
     }));
   }
 
@@ -61,9 +79,13 @@ class SelectPlaylist extends React.Component {
             >
               <DropdownToggle caret>Playlist</DropdownToggle>
               <DropdownMenu>
-                {this.props.allPlaylists.rows.map(data => (
+                {this.props.allPlaylists.rows.map((data, index) => (
                   <DropdownItem key={data.id}>
-                    <div onClick={this.onDropdownItemClick} id={data.id}>
+                    <div
+                      onClick={this.onDropdownItemClick}
+                      id={data.id}
+                      index={index}
+                    >
                       {data.name}
                     </div>
                   </DropdownItem>
@@ -82,11 +104,13 @@ class SelectPlaylist extends React.Component {
   }
 }
 function mapStateToProps(state) {
-  const { updatePlaylists, modifyPlaylist } = state;
+  const { updatePlaylists, modifyPlaylist, tracksByAlbumId } = state;
   return {
     allPlaylists: updatePlaylists.allPlaylists,
     id: modifyPlaylist.id,
-    modal: modifyPlaylist.openModal
+    modal: modifyPlaylist.openModal,
+    type: modifyPlaylist.type,
+    tracksIds: tracksByAlbumId.tracksIds
   };
 }
 function mapDispatchToProps(dispatch) {
@@ -104,10 +128,23 @@ function mapDispatchToProps(dispatch) {
         try {
           let album = await addTrackToPlaylist(id, data);
           console.log('success');
-          // dispatch({ type: ALBUM.SUCCESS, album });
         } catch (error) {
           console.log('err');
-          // dispatch({ type: ALBUM.ERROR, message: error.message });
+        }
+      };
+    },
+    getTracksById(id) {
+      this.getAlbumTracksById(id);
+    },
+    get getAlbumTracksById() {
+      return async id => {
+        try {
+          let trackIds = await getAlbumTracks(id);
+          console.log('success');
+          dispatch({ type: 'GETTRACKSBYALBUMIDSUCCESS', payload: trackIds });
+        } catch (error) {
+          console.log('err');
+          dispatch({ type: 'GETTRACKSBYALBUMIDERROR', payload: error.message });
         }
       };
     }

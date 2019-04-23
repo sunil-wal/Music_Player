@@ -64,6 +64,40 @@ function DataList(props) {
   );
 }
 
+function PlaylistTracks(props) {
+  const names = props.names;
+  let addButton = props.addButton;
+  const listItems = names.rows.map((data, index) => {
+    const id = `/tracksByPlaylistId/${data.id}`;
+    return (
+      <Row>
+        <Col xs="11">
+          <Link to={id}>
+            <ListGroupItem key={data.name + index}>{data.name}</ListGroupItem>
+          </Link>
+        </Col>
+        <Col xs="1">
+          {' '}
+          {addButton ? (
+            <button
+              className="btn-xs btn btn-primary pull-right"
+              onClick={() => props.addSongFun(data.id, names.name)}
+            >
+              +
+            </button>
+          ) : null}
+        </Col>
+      </Row>
+    );
+  });
+  return (
+    <div>
+      <ListGroup>{listItems}</ListGroup>
+      <DataPagination itemsLength={names.count} name={names.name} />
+    </div>
+  );
+}
+
 class HomePage extends React.Component {
   constructor(props) {
     super(props);
@@ -97,9 +131,9 @@ class HomePage extends React.Component {
   handleLogout() {
     this.props.logout();
   }
-  handleAddSong(id) {
+  handleAddSong(id, type) {
     console.log('ha', id);
-    this.props.addSong(id);
+    this.props.addSong(id, type);
   }
 
   render() {
@@ -258,7 +292,7 @@ class HomePage extends React.Component {
                 </div>
                 <div>
                   {allPlaylists ? (
-                    <DataList names={allPlaylists} addButton={false} />
+                    <PlaylistTracks names={allPlaylists} addButton={false} />
                   ) : (
                     ''
                   )}
@@ -294,9 +328,12 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
   return {
     clearData: () => {},
-    addSong: id => {
+    addSong: (id, type) => {
       console.log(id);
-      dispatch({ type: 'ADDSONGBYID', payload: { id, openModal: true } });
+      dispatch({
+        type: 'ADDSONGBYID',
+        payload: { id, openModal: true, type: type }
+      });
     },
     loadData() {
       this.loadAlbum();

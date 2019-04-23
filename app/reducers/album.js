@@ -1,6 +1,6 @@
 import { ALBUM } from '../constants/types';
 
-const album = (state = {}, action) => {
+export const album = (state = {}, action) => {
   switch (action.type) {
     case ALBUM.SAVE_SUCCESS:
       return {
@@ -41,4 +41,21 @@ const album = (state = {}, action) => {
   }
 };
 
-export default album;
+export const tracksByAlbumId = (state = { trackIds: [] }, action) => {
+  switch (action.type) {
+    case 'GETTRACKSBYALBUMIDSUCCESS':
+      return {
+        ...state,
+        trackIds: action.payload
+      };
+
+    case 'GETTRACKSBYALBUMIDERROR':
+      return {
+        ...state,
+        message: action.payload
+      };
+
+    default:
+      return state;
+  }
+};
