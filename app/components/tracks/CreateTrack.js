@@ -5,28 +5,29 @@ import styles from './CreateTrack.css';
 import routes from '../../constants/routes';
 
 class CreateTrack extends Component {
-  state = {
-    name: '',
-    minutes: '',
-    seconds: '',
-    genre: '',
-    artistId: [1]
-  };
-
   componentWillUnmount() {
     this.props.track.success = false;
+    this.props.resetTrackForm();
   }
 
   saveTrack = e => {
     e.preventDefault();
-    this.props.createTrack(this.state);
+    this.props.createTrack(this.props.track);
   };
 
   changeHandler = e => {
     const name = e.target.name;
     const value = e.target.value;
 
-    this.setState({ [name]: value });
+    if (name === 'name') {
+      this.props.trackNameEdit(value);
+    } else if (name === 'minutes') {
+      this.props.trackMinutesEdit(value);
+    } else if (name === 'seconds') {
+      this.props.trackSecondsEdit(value);
+    } else {
+      this.props.trackGenreEdit(value);
+    }
   };
 
   render() {
@@ -51,9 +52,14 @@ class CreateTrack extends Component {
                 name="text"
                 id="track-name"
                 name="name"
-                value={this.state.name}
+                value={this.props.track.name}
                 onChange={this.changeHandler}
               />
+              {this.props.track.error && this.props.track.error.name && (
+                <Label className="error-label">
+                  {this.props.track.error.name}
+                </Label>
+              )}
             </FormGroup>
             <FormGroup>
               <Label for="track-duration">Duration</Label>
@@ -65,9 +71,14 @@ class CreateTrack extends Component {
                     id="track-duration"
                     placeholder="Minutes"
                     name="minutes"
-                    value={this.state.minutes}
+                    value={this.props.track.minutes}
                     onChange={this.changeHandler}
                   />
+                  {this.props.track.error && this.props.track.error.minutes && (
+                    <Label className="error-label">
+                      {this.props.track.error.minutes}
+                    </Label>
+                  )}
                 </div>
                 <div className="col-sm-6">
                   <Input
@@ -76,7 +87,7 @@ class CreateTrack extends Component {
                     placeholder="Seconds"
                     id="track-duration-seconds"
                     name="seconds"
-                    value={this.state.seconds}
+                    value={this.props.track.seconds}
                     onChange={this.changeHandler}
                   />
                 </div>
@@ -90,7 +101,7 @@ class CreateTrack extends Component {
                 id="track-genre"
                 name="genre"
                 onChange={this.changeHandler}
-                value={this.state.genre}
+                value={this.props.track.genre}
               >
                 <option value="rock">rock</option>
                 <option value="jazz">jazz</option>

@@ -1,6 +1,7 @@
 import { ARTIST } from '../constants/types';
+import validateArtist from '../validations/artistValidate';
 
-const artist = (state = {}, action) => {
+const artist = (state = { name: '' }, action) => {
   switch (action.type) {
     case ARTIST.SAVE_SUCCESS:
       const { success } = action;
@@ -21,7 +22,11 @@ const artist = (state = {}, action) => {
 
       return {
         ...state,
-        allArtist: { rows: rows.map(data => data.name), count, name: 'artists' }
+        allArtist: {
+          rows: rows.map(data => data.name),
+          count,
+          name: 'artists'
+        }
       };
 
     case ARTIST.ERROR:
@@ -30,6 +35,22 @@ const artist = (state = {}, action) => {
       return {
         ...state,
         message: errorMessage
+      };
+    case ARTIST.VALIDATION_ERROR:
+      return {
+        ...state,
+        error: action.error
+      };
+    case ARTIST.NAME_EDIT:
+      return {
+        ...state,
+        name: action.name
+      };
+    case ARTIST.FORM_RESET:
+      return {
+        ...state,
+        name: '',
+        error: null
       };
     default:
       return state;

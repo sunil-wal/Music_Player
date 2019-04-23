@@ -5,24 +5,23 @@ import styles from './CreateArtist.css';
 import routes from '../../constants/routes';
 
 class CreateArtist extends Component {
-  state = {
-    name: ''
-  };
-
   componentWillUnmount() {
     this.props.artist.success = false;
+    this.props.resetArtistForm();
   }
 
   saveArtist = e => {
     e.preventDefault();
-    this.props.createArtist(this.state);
+    this.props.createArtist(this.props.artist);
   };
 
   changeHandler = e => {
     const name = e.target.name;
     const value = e.target.value;
 
-    this.setState({ [name]: value });
+    if (name === 'name') {
+      this.props.artistNameEdit(value);
+    }
   };
 
   render() {
@@ -45,9 +44,12 @@ class CreateArtist extends Component {
                 type="text"
                 name="name"
                 id="artist-name"
-                value={this.state.name}
+                value={this.props.artist.name}
                 onChange={this.changeHandler}
               />
+              {this.props.artist.error && (
+                <Label className="error-label">{this.props.artist.error}</Label>
+              )}
             </FormGroup>
             <Button color="primary">Save</Button>
           </Form>

@@ -2,6 +2,18 @@ import { TRACK } from '../constants/types';
 import * as axios from 'axios';
 import { authHeader } from '../helpers';
 
+export const validateTrack = track => {
+  return { type: TRACK.VALIDATE, track };
+};
+
+export const trackValidationErrors = error => {
+  return { type: TRACK.VALIDATION_ERROR, error };
+};
+
+export const resetTrackForm = () => {
+  return { type: TRACK.FORM_RESET };
+};
+
 export const createTrackSuccess = success => {
   return { type: TRACK.SAVE_SUCCESS, success };
 };
