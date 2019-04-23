@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import routes from '../constants/routes';
 import { history } from '../helpers';
 import { browserHistory } from 'react-router';
+import SelectValue from './reusable/SelectValue';
 import {
   ARTIST,
   ALBUM,
@@ -50,11 +51,9 @@ function DataList(props) {
   let addButton = props.addButton;
   const listItems = names.rows.map((data, index) => {
     return (
-      <Row>
+      <Row key={data.name + index}>
         <Col xs="11">
-          <ListGroupItem key={data.name + index} onClick={props.getData}>
-            {data.name}
-          </ListGroupItem>
+          <ListGroupItem onClick={props.getData}>{data.name}</ListGroupItem>
         </Col>
         <Col xs="1">
           {' '}
@@ -84,22 +83,11 @@ function PlaylistTracks(props) {
   const listItems = names.rows.map((data, index) => {
     const id = `/tracksByPlaylistId/${data.id}`;
     return (
-      <Row>
-        <Col xs="11">
+      <Row key={data.name + index}>
+        <Col xs="12">
           <Link to={id}>
-            <ListGroupItem key={data.name + index}>{data.name}</ListGroupItem>
+            <ListGroupItem>{data.name}</ListGroupItem>
           </Link>
-        </Col>
-        <Col xs="1">
-          {' '}
-          {addButton ? (
-            <button
-              className="btn-xs btn btn-primary pull-right"
-              onClick={() => props.addSongFun(data.id, names.name)}
-            >
-              +
-            </button>
-          ) : null}
         </Col>
       </Row>
     );
@@ -111,7 +99,6 @@ function PlaylistTracks(props) {
     </div>
   );
 }
-
 class HomePage extends React.Component {
   constructor(props) {
     super(props);
@@ -290,6 +277,7 @@ class HomePage extends React.Component {
                   <div>
                     <br />
                     <SearchPage name="tracks" />
+                    <SelectValue />
                     <div className="text-right">
                       <Link to={routes.NEW_TRACK} className="btn btn-link">
                         <Button color="primary">Add Track</Button>

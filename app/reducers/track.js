@@ -21,7 +21,8 @@ export const track = (state = {}, action) => {
         allTrack: {
           rows: rows.map(data => ({
             name: data.name,
-            id: data.id
+            id: data.id,
+            genre: data.genre
           })),
           count,
           name: 'tracks'

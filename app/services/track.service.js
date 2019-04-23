@@ -11,6 +11,16 @@ export const getTracks = async (page = 1, searchText = '') => {
 
   return response.data.tracks;
 };
+export const getTracksByGenre = async genre => {
+  let response = await axios({
+    url: '/tracks',
+    params: {
+      genre
+    }
+  });
+
+  return response.data.tracks;
+};
 export const getAlbumTracks = async id => {
   let response = await axios({
     url: `/albums/${id}/tracks`
