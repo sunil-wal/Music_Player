@@ -8,6 +8,8 @@ import { album, tracksByAlbumId } from './album';
 import artist from './artist';
 import { track, trackByPlaylistId } from './track';
 import modifyPlaylist from './modifyPlaylist.reducer';
+import albumTracks from './albumTracks';
+import artistAlbums from './artistAlbums';
 
 const rootReducer = combineReducers({
   counter,
@@ -20,7 +22,9 @@ const rootReducer = combineReducers({
   track,
   modifyPlaylist,
   trackByPlaylistId,
-  tracksByAlbumId
+  tracksByAlbumId,
+  albumTracks,
+  artistAlbums
 });
 
 export default rootReducer;

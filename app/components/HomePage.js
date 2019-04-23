@@ -4,7 +4,14 @@ import { connect } from 'react-redux';
 import routes from '../constants/routes';
 import { history } from '../helpers';
 import { browserHistory } from 'react-router';
-import { ARTIST, ALBUM, TRACK, PLAYLIST } from '../constants';
+import {
+  ARTIST,
+  ALBUM,
+  TRACK,
+  PLAYLIST,
+  ALBUMTRACKS,
+  ARTISTALBUM
+} from '../constants';
 import {
   TabContent,
   TabPane,
@@ -26,7 +33,14 @@ import {
 import classnames from 'classnames';
 import { userActions } from '../actions';
 import DataPagination from './DataPagination';
-import { getAlbum, getArtists, getTracks, getPlaylists } from '../services';
+import {
+  getAlbum,
+  getArtists,
+  getTracks,
+  getPlaylists,
+  getAlbumTrack,
+  getArtistAlbums
+} from '../services';
 import styles from './HomePage.css';
 import SearchPage from './search/SearchPage';
 import SelectPlaylist from './modals/SelectPlaylist';
@@ -38,9 +52,9 @@ function DataList(props) {
     return (
       <Row>
         <Col xs="11">
-          <Link to="/track">
-            <ListGroupItem key={data.name + index}>{data.name}</ListGroupItem>
-          </Link>
+          <ListGroupItem key={data.name + index} onClick={props.getData}>
+            {data.name}
+          </ListGroupItem>
         </Col>
         <Col xs="1">
           {' '}
@@ -111,11 +125,14 @@ class HomePage extends React.Component {
 
     this.handleToggle = this.handleToggle.bind(this);
     this.handleLogout = this.handleLogout.bind(this);
+    this.handleAlbumTracks = this.handleAlbumTracks.bind(this);
+    this.handleArtistAlbums = this.handleArtistAlbums.bind(this);
     this.handleAddSong = this.handleAddSong.bind(this);
     this.state = {
       activeTab: '1'
     };
   }
+
   componentDidMount() {
     const { dispatch } = this.props;
     this.props.clearData();
@@ -131,6 +148,12 @@ class HomePage extends React.Component {
   handleLogout() {
     this.props.logout();
   }
+  handleAlbumTracks() {
+    this.props.loadAlbumTracks();
+  }
+  handleArtistAlbums() {
+    this.props.loadArtistAlbums();
+  }
   handleAddSong(id, type) {
     console.log('ha', id);
     this.props.addSong(id, type);
@@ -142,6 +165,7 @@ class HomePage extends React.Component {
       allArtist,
       allAlbum,
       allTrack,
+      allAlbumTracks,
       allPlaylists
     } = this.props;
     return (
@@ -219,7 +243,14 @@ class HomePage extends React.Component {
                 ) : (
                   ''
                 )}
-                {allArtist ? <DataList names={allArtist} /> : ''}
+                {allArtist ? (
+                  <DataList
+                    names={allArtist}
+                    getData={this.handleArtistAlbums}
+                  />
+                ) : (
+                  ''
+                )}
               </Col>
             </Row>
           </TabPane>
@@ -243,6 +274,7 @@ class HomePage extends React.Component {
                   <DataList
                     names={allAlbum}
                     addButton={true}
+                    getData={this.handleAlbumTracks}
                     addSongFun={this.handleAddSong}
                   />
                 ) : (
@@ -313,7 +345,8 @@ function mapStateToProps(state) {
     album,
     track,
     updatePlaylists,
-    modifyPlaylist
+    modifyPlaylist,
+    albumTracks
   } = state;
   return {
     authentication,
@@ -321,7 +354,8 @@ function mapStateToProps(state) {
     allAlbum: album.allAlbum,
     allPlaylists: updatePlaylists.allPlaylists,
     allTrack: track.allTrack,
-    modifyPlaylist
+    modifyPlaylist,
+    allAlbumTrack: albumTracks.allAlbumTrack
   };
 }
 
@@ -341,7 +375,6 @@ function mapDispatchToProps(dispatch) {
       this.loadTracks();
       this.loadPlaylists();
     },
-
     get loadAlbum() {
       return async () => {
         try {
@@ -369,6 +402,28 @@ function mapDispatchToProps(dispatch) {
           dispatch({ type: TRACK.SUCCESS, track });
         } catch (error) {
           dispatch({ type: TRACK.ERROR, message: error.message });
+        }
+      };
+    },
+    get loadAlbumTracks() {
+      return async () => {
+        try {
+          console.log('hello');
+          let albumTracks = await getAlbumTrack();
+
+          dispatch({ type: ALBUMTRACKS.SUCCESS, albumTracks });
+        } catch (error) {
+          dispatch({ type: ALBUMTRACKS.ERROR, message: error.message });
+        }
+      };
+    },
+    get loadArtistAlbums() {
+      return async () => {
+        try {
+          let artistAlbums = await getArtistAlbums();
+          dispatch({ type: ARTISTALBUM.SUCCESS, payload: artistAlbums });
+        } catch (error) {
+          dispatch({ type: ARTISTALBUM.ERROR, message: error.message });
         }
       };
     },
