@@ -4,7 +4,14 @@ import { connect } from 'react-redux';
 import routes from '../constants/routes';
 import { history } from '../helpers';
 import { browserHistory } from 'react-router';
-import { ARTIST, ALBUM, TRACK, PLAYLIST } from '../constants';
+import {
+  ARTIST,
+  ALBUM,
+  TRACK,
+  PLAYLIST,
+  ALBUMTRACKS,
+  ARTISTALBUM
+} from '../constants';
 import {
   TabContent,
   TabPane,
@@ -20,30 +27,81 @@ import {
   Modal,
   ModalHeader,
   ModalBody,
-  ModalFooter
+  ModalFooter,
+  Container
 } from 'reactstrap';
 import classnames from 'classnames';
 import { userActions } from '../actions';
 import DataPagination from './DataPagination';
-import { getAlbum, getArtists, getTracks, getPlaylists } from '../services';
+import {
+  getAlbum,
+  getArtists,
+  getTracks,
+  getPlaylists,
+  getAlbumTrack,
+  getArtistAlbums
+} from '../services';
 import styles from './HomePage.css';
 import SearchPage from './search/SearchPage';
+import SelectPlaylist from './modals/SelectPlaylist';
 
 function DataList(props) {
   const names = props.names;
   let addButton = props.addButton;
-  const listItems = names.rows.map((name, index) => {
+  const listItems = names.rows.map((data, index) => {
     return (
-      <div>
-        <Link to="/track">
-          <ListGroupItem key={name + index}>
-            {name}
-            {addButton ? (
-              <button className="btn-xs btn btn-primary pull-right">+</button>
-            ) : null}
+      <Row>
+        <Col xs="11">
+          <ListGroupItem key={data.name + index} onClick={props.getData}>
+            {data.name}
           </ListGroupItem>
-        </Link>
-      </div>
+        </Col>
+        <Col xs="1">
+          {' '}
+          {addButton ? (
+            <button
+              className="btn-xs btn btn-primary pull-right"
+              onClick={() => props.addSongFun(data.id)}
+            >
+              +
+            </button>
+          ) : null}
+        </Col>
+      </Row>
+    );
+  });
+  return (
+    <div>
+      <ListGroup>{listItems}</ListGroup>
+      <DataPagination itemsLength={names.count} name={names.name} />
+    </div>
+  );
+}
+
+function PlaylistTracks(props) {
+  const names = props.names;
+  let addButton = props.addButton;
+  const listItems = names.rows.map((data, index) => {
+    const id = `/tracksByPlaylistId/${data.id}`;
+    return (
+      <Row>
+        <Col xs="11">
+          <Link to={id}>
+            <ListGroupItem key={data.name + index}>{data.name}</ListGroupItem>
+          </Link>
+        </Col>
+        <Col xs="1">
+          {' '}
+          {addButton ? (
+            <button
+              className="btn-xs btn btn-primary pull-right"
+              onClick={() => props.addSongFun(data.id, names.name)}
+            >
+              +
+            </button>
+          ) : null}
+        </Col>
+      </Row>
     );
   });
   return (
@@ -67,10 +125,14 @@ class HomePage extends React.Component {
 
     this.handleToggle = this.handleToggle.bind(this);
     this.handleLogout = this.handleLogout.bind(this);
+    this.handleAlbumTracks = this.handleAlbumTracks.bind(this);
+    this.handleArtistAlbums = this.handleArtistAlbums.bind(this);
+    this.handleAddSong = this.handleAddSong.bind(this);
     this.state = {
       activeTab: '1'
     };
   }
+
   componentDidMount() {
     const { dispatch } = this.props;
     this.props.clearData();
@@ -86,6 +148,16 @@ class HomePage extends React.Component {
   handleLogout() {
     this.props.logout();
   }
+  handleAlbumTracks() {
+    this.props.loadAlbumTracks();
+  }
+  handleArtistAlbums() {
+    this.props.loadArtistAlbums();
+  }
+  handleAddSong(id, type) {
+    console.log('ha', id);
+    this.props.addSong(id, type);
+  }
 
   render() {
     const {
@@ -93,6 +165,7 @@ class HomePage extends React.Component {
       allArtist,
       allAlbum,
       allTrack,
+      allAlbumTracks,
       allPlaylists
     } = this.props;
     return (
@@ -170,7 +243,14 @@ class HomePage extends React.Component {
                 ) : (
                   ''
                 )}
-                {allArtist ? <DataList names={allArtist} /> : ''}
+                {allArtist ? (
+                  <DataList
+                    names={allArtist}
+                    getData={this.handleArtistAlbums}
+                  />
+                ) : (
+                  ''
+                )}
               </Col>
             </Row>
           </TabPane>
@@ -190,7 +270,16 @@ class HomePage extends React.Component {
                 ) : (
                   ''
                 )}
-                {allAlbum ? <DataList names={allAlbum} addButton={true} /> : ''}
+                {allAlbum ? (
+                  <DataList
+                    names={allAlbum}
+                    addButton={true}
+                    getData={this.handleAlbumTracks}
+                    addSongFun={this.handleAddSong}
+                  />
+                ) : (
+                  ''
+                )}
               </Col>
             </Row>
           </TabPane>
@@ -210,7 +299,15 @@ class HomePage extends React.Component {
                 ) : (
                   ''
                 )}
-                {allTrack ? <DataList names={allTrack} addButton={true} /> : ''}
+                {allTrack ? (
+                  <DataList
+                    names={allTrack}
+                    addButton={true}
+                    addSongFun={this.handleAddSong}
+                  />
+                ) : (
+                  ''
+                )}
               </Col>
             </Row>
           </TabPane>
@@ -227,7 +324,7 @@ class HomePage extends React.Component {
                 </div>
                 <div>
                   {allPlaylists ? (
-                    <DataList names={allPlaylists} addButton={false} />
+                    <PlaylistTracks names={allPlaylists} addButton={false} />
                   ) : (
                     ''
                   )}
@@ -236,31 +333,48 @@ class HomePage extends React.Component {
             </Row>
           </TabPane>
         </TabContent>
+        {this.props.modifyPlaylist.openModal ? <SelectPlaylist /> : ''}
       </div>
     );
   }
 }
 function mapStateToProps(state) {
-  const { authentication, artist, album, track, updatePlaylists } = state;
+  const {
+    authentication,
+    artist,
+    album,
+    track,
+    updatePlaylists,
+    modifyPlaylist,
+    albumTracks
+  } = state;
   return {
     authentication,
     allArtist: artist.allArtist,
     allAlbum: album.allAlbum,
     allPlaylists: updatePlaylists.allPlaylists,
-    allTrack: track.allTrack
+    allTrack: track.allTrack,
+    modifyPlaylist,
+    allAlbumTrack: albumTracks.allAlbumTrack
   };
 }
 
 function mapDispatchToProps(dispatch) {
   return {
     clearData: () => {},
+    addSong: (id, type) => {
+      console.log(id);
+      dispatch({
+        type: 'ADDSONGBYID',
+        payload: { id, openModal: true, type: type }
+      });
+    },
     loadData() {
       this.loadAlbum();
       this.loadArtists();
       this.loadTracks();
       this.loadPlaylists();
     },
-
     get loadAlbum() {
       return async () => {
         try {
@@ -288,6 +402,28 @@ function mapDispatchToProps(dispatch) {
           dispatch({ type: TRACK.SUCCESS, track });
         } catch (error) {
           dispatch({ type: TRACK.ERROR, message: error.message });
+        }
+      };
+    },
+    get loadAlbumTracks() {
+      return async () => {
+        try {
+          console.log('hello');
+          let albumTracks = await getAlbumTrack();
+
+          dispatch({ type: ALBUMTRACKS.SUCCESS, albumTracks });
+        } catch (error) {
+          dispatch({ type: ALBUMTRACKS.ERROR, message: error.message });
+        }
+      };
+    },
+    get loadArtistAlbums() {
+      return async () => {
+        try {
+          let artistAlbums = await getArtistAlbums();
+          dispatch({ type: ARTISTALBUM.SUCCESS, payload: artistAlbums });
+        } catch (error) {
+          dispatch({ type: ARTISTALBUM.ERROR, message: error.message });
         }
       };
     },

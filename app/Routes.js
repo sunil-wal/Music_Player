@@ -7,6 +7,7 @@ import CounterPage from './containers/CounterPage';
 import NewAlbumPage from './containers/NewAlbumPage';
 import NewArtistPage from './containers/NewArtistPage';
 import NewTrackPage from './containers/NewTrackPage';
+import TracksByPlaylistId from './components/TracksByPlaylistId';
 import CreatePlaylist from './containers/NewPlaylistPage';
 import PlaylistsPage from './containers/PlaylistsPage';
 import RegisterPage from './containers/RegisterPage';
@@ -44,6 +45,10 @@ class Routes extends Component {
                     component={CreatePlaylist}
                   />
                   <Route path={routes.NEW_TRACK} component={NewTrackPage} />
+                  <Route
+                    path="/tracksByPlaylistId/:id"
+                    component={TracksByPlaylistId}
+                  />
                   <Route path={routes.PLAYLISTS} component={PlaylistsPage} />
                 </Switch>
               </div>

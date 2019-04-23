@@ -1,7 +1,7 @@
 import { ALBUM } from '../constants/types';
 import validateAlbum from '../validations/albumValidate';
 
-const album = (state = { name: '', launchDate: '' }, action) => {
+export const album = (state = { name: '', launchDate: '' }, action) => {
   switch (action.type) {
     case ALBUM.SAVE_SUCCESS:
       return {
@@ -20,7 +20,14 @@ const album = (state = { name: '', launchDate: '' }, action) => {
 
       return {
         ...state,
-        allAlbum: { rows: rows.map(data => data.name), count, name: 'albums' }
+        allAlbum: {
+          rows: rows.map(data => ({
+            name: data.name,
+            id: data.id
+          })),
+          count,
+          name: 'albums'
+        }
       };
 
     case ALBUM.ERROR:
@@ -57,4 +64,21 @@ const album = (state = { name: '', launchDate: '' }, action) => {
   }
 };
 
-export default album;
+export const tracksByAlbumId = (state = { trackIds: [] }, action) => {
+  switch (action.type) {
+    case 'GETTRACKSBYALBUMIDSUCCESS':
+      return {
+        ...state,
+        trackIds: action.payload
+      };
+
+    case 'GETTRACKSBYALBUMIDERROR':
+      return {
+        ...state,
+        message: action.payload
+      };
+
+    default:
+      return state;
+  }
+};
