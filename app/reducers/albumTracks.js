@@ -1,9 +1,10 @@
 import { ALBUMTRACKS } from '../constants/types';
-const albumTracks = (state = {}, action) => {
+const albumTracks = (state = { tracksByAlbum: [] }, action) => {
   switch (action.type) {
     case ALBUMTRACKS.SUCCESS:
       return {
-        ...state
+        ...state,
+        tracksByAlbum: action.payload
       };
 
     case ALBUMTRACKS.ERROR:
