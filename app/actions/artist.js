@@ -2,6 +2,18 @@ import { ARTIST } from '../constants/types';
 import * as axios from 'axios';
 import { authHeader } from '../helpers';
 
+export const validateArtist = artist => {
+  return { type: ARTIST.VALIDATE, artist };
+};
+
+export const artistValidationErrors = error => {
+  return { type: ARTIST.VALIDATION_ERROR, error };
+};
+
+export const resetArtistForm = () => {
+  return { type: ARTIST.FORM_RESET };
+};
+
 export const createArtistSuccess = success => {
   return { type: ARTIST.SAVE_SUCCESS, success };
 };

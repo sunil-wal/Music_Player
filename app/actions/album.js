@@ -2,6 +2,26 @@ import { ALBUM } from '../constants/types';
 import * as axios from 'axios';
 import { authHeader } from '../helpers';
 
+export const validateAlbumNew = album => {
+  return { type: ALBUM.VALIDATE, album };
+};
+
+export const albumErrors = error => {
+  return { type: ALBUM.VALIDATION_ERROR, error };
+};
+
+export const resetAlbumForm = () => {
+  return { type: ALBUM.FORM_RESET };
+};
+
+export const albumNameEdit = name => {
+  return { type: ALBUM.NAME_EDIT, name };
+};
+
+export const albumLaunchDateEdit = launchDate => {
+  return { type: ALBUM.LAUNCH_DATE_EDIT, launchDate };
+};
+
 export const createAlbumSuccess = success => {
   return { type: ALBUM.SAVE_SUCCESS, success };
 };
@@ -15,10 +35,18 @@ export const createAlbum = payload => dispatch => {
     headers: authHeader()
   };
 
+  const album = {
+    name: payload.name
+  };
+
+  if (album.launchDate) {
+    album.launchDate = payload.launchDate;
+  }
+
   return axios
     .post(
       'https://musicplayer-api-wal.herokuapp.com/api/v1/albums',
-      payload,
+      album,
       config
     )
     .then(json => {

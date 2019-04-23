@@ -49,11 +49,29 @@ import SelectPlaylist from './modals/SelectPlaylist';
 function DataList(props) {
   const names = props.names;
   let addButton = props.addButton;
+  let liChild = '';
+
+  let id = props.id;
+  let toggleItem = props.toggle;
+
+  if (props.getli) {
+    let getli = props.getli;
+    console.log('getli', getli);
+    liChild = getli.map((data, index) => {
+      return <li key={data.id}>{data.name}</li>;
+    });
+  }
+
+  // if (id && id == data.id) {
+  // }
+
   const listItems = names.rows.map((data, index) => {
     return (
       <Row key={data.name + index}>
         <Col xs="11">
-          <ListGroupItem onClick={props.getData}>{data.name}</ListGroupItem>
+          <ListGroupItem onClick={() => props.getData(data.id)}>
+            {data.name}
+          </ListGroupItem>
         </Col>
         <Col xs="1">
           {' '}
@@ -66,6 +84,8 @@ function DataList(props) {
             </button>
           ) : null}
         </Col>
+
+        <ul>{id === data.id ? liChild : ''}</ul>
       </Row>
     );
   });
@@ -135,11 +155,13 @@ class HomePage extends React.Component {
   handleLogout() {
     this.props.logout();
   }
-  handleAlbumTracks() {
-    this.props.loadAlbumTracks();
+  handleAlbumTracks(id) {
+    console.log('check id', id);
+    this.props.loadAlbumTracks(id);
   }
-  handleArtistAlbums() {
-    this.props.loadArtistAlbums();
+  handleArtistAlbums(id) {
+    console.log('check id', id);
+    this.props.loadArtistAlbums(id);
   }
   handleAddSong(id, type) {
     console.log('ha', id);
@@ -153,7 +175,9 @@ class HomePage extends React.Component {
       allAlbum,
       allTrack,
       allAlbumTracks,
-      allPlaylists
+      allPlaylists,
+      tracksByAlbum,
+      albumsByArtist
     } = this.props;
     return (
       <div id={styles.homePage}>
@@ -234,6 +258,9 @@ class HomePage extends React.Component {
                   <DataList
                     names={allArtist}
                     getData={this.handleArtistAlbums}
+                    getli={albumsByArtist.artistAlbums}
+                    id={albumsByArtist.id}
+                    toggleItem={albumsByArtist.toggle}
                   />
                 ) : (
                   ''
@@ -260,7 +287,7 @@ class HomePage extends React.Component {
                 {allAlbum ? (
                   <DataList
                     names={allAlbum}
-                    addButton={true}
+                    addButton="true"
                     getData={this.handleAlbumTracks}
                     addSongFun={this.handleAddSong}
                   />
@@ -334,8 +361,11 @@ function mapStateToProps(state) {
     track,
     updatePlaylists,
     modifyPlaylist,
-    albumTracks
+    albumTracks,
+    artistAlbums
   } = state;
+  console.log('albumTracks.tracksByAlbum', albumTracks.tracksByAlbum);
+  console.log('artistAlbums.albumsByArtist', artistAlbums.albumsByArtist);
   return {
     authentication,
     allArtist: artist.allArtist,
@@ -343,7 +373,9 @@ function mapStateToProps(state) {
     allPlaylists: updatePlaylists.allPlaylists,
     allTrack: track.allTrack,
     modifyPlaylist,
-    allAlbumTrack: albumTracks.allAlbumTrack
+    //allAlbumTrack: albumTracks.allAlbumTrack,
+    tracksByAlbum: albumTracks.tracksByAlbum,
+    albumsByArtist: artistAlbums.albumsByArtist
   };
 }
 
@@ -394,10 +426,10 @@ function mapDispatchToProps(dispatch) {
       };
     },
     get loadAlbumTracks() {
-      return async () => {
+      return async id => {
         try {
-          console.log('hello');
-          let albumTracks = await getAlbumTrack();
+          console.log('id in main', id);
+          let albumTracks = await getAlbumTrack(1, '', id);
 
           dispatch({ type: ALBUMTRACKS.SUCCESS, albumTracks });
         } catch (error) {
@@ -406,10 +438,16 @@ function mapDispatchToProps(dispatch) {
       };
     },
     get loadArtistAlbums() {
-      return async () => {
+      return async id => {
         try {
-          let artistAlbums = await getArtistAlbums();
-          dispatch({ type: ARTISTALBUM.SUCCESS, payload: artistAlbums });
+          console.log('id in main2', id);
+          let artistAlbums = await getArtistAlbums(1, '', id);
+
+          dispatch({
+            type: ARTISTALBUM.SUCCESS,
+            payload: { artistAlbums, toggle: false, id }
+          });
+          console.log('response in homepage', artistAlbums);
         } catch (error) {
           dispatch({ type: ARTISTALBUM.ERROR, message: error.message });
         }
