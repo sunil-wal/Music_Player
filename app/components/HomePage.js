@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import routes from '../constants/routes';
 import { history } from '../helpers';
 import { browserHistory } from 'react-router';
+
 import {
   ARTIST,
   ALBUM,

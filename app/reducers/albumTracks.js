@@ -1,4 +1,5 @@
 import { ALBUMTRACKS } from '../constants/types';
+
 const albumTracks = (state = { tracksByAlbum: [] }, action) => {
   switch (action.type) {
     case ALBUMTRACKS.SUCCESS:

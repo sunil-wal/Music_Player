@@ -9,6 +9,6 @@ export const getArtistAlbums = async (page = 1, searchText = '', artistid) => {
     }
   });
 
-  console.log('service response', response.data.result.rows[0].albums);
+  //console.log('service response', response.data.result.rows[0].albums);
   return response.data.result.rows[0].albums;
 };

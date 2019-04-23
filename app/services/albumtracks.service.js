@@ -8,6 +8,5 @@ export const getAlbumTrack = async (page = 1, searchText = '', albumid) => {
       searchText
     }
   });
-
   return response.data.result[0].albumTracks;
 };
