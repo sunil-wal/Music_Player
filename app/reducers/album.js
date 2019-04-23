@@ -1,11 +1,11 @@
 import { ALBUM } from '../constants/types';
 
-const album = (state = {}, action) => {
+export const album = (state = {}, action) => {
   switch (action.type) {
     case ALBUM.SAVE_SUCCESS:
       return {
         ...state,
-        message: action.message
+        success: action.success
       };
 
     case ALBUM.SAVE_ERROR:
@@ -19,19 +19,43 @@ const album = (state = {}, action) => {
 
       return {
         ...state,
-        allAlbum: { rows: rows.map(data => data.name), count, name: 'albums' }
+        allAlbum: {
+          rows: rows.map(data => ({
+            name: data.name,
+            id: data.id
+          })),
+          count,
+          name: 'albums'
+        }
       };
 
     case ALBUM.ERROR:
-      const errorMessage = action.message;
+      const errorMessage = action.success;
 
       return {
         ...state,
-        message: errorMessage
+        success: errorMessage
       };
     default:
       return state;
   }
 };
 
-export default album;
+export const tracksByAlbumId = (state = { trackIds: [] }, action) => {
+  switch (action.type) {
+    case 'GETTRACKSBYALBUMIDSUCCESS':
+      return {
+        ...state,
+        trackIds: action.payload
+      };
+
+    case 'GETTRACKSBYALBUMIDERROR':
+      return {
+        ...state,
+        message: action.payload
+      };
+
+    default:
+      return state;
+  }
+};

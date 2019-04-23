@@ -1,5 +1,5 @@
 import axios from './http.service';
-export const getAlbumTracks = async (
+export const getAlbumTrack = async (
   page = 1,
   searchText = '',
   albumid = 27
