@@ -4,7 +4,8 @@ import { connect } from 'react-redux';
 import routes from '../constants/routes';
 import { history } from '../helpers';
 import { browserHistory } from 'react-router';
-import { ARTIST, ALBUM, TRACK } from '../constants';
+import { ARTIST, ALBUM, TRACK, ALBUMTRACKS, ARTISTALBUM } from '../constants';
+import TreeMenu from 'react-simple-tree-menu';
 import {
   TabContent,
   TabPane,
@@ -25,24 +26,29 @@ import {
 import classnames from 'classnames';
 import { userActions } from '../actions';
 import DataPagination from './DataPagination';
-import { getAlbum, getArtists, getTracks } from '../services';
+import {
+  getAlbum,
+  getArtists,
+  getTracks,
+  getAlbumTracks,
+  getArtistAlbums
+} from '../services';
 import styles from './HomePage.css';
 import SearchPage from './search/SearchPage';
 
 function DataList(props) {
   const names = props.names;
   let addButton = props.addButton;
+
   const listItems = names.rows.map((name, index) => {
     return (
       <div>
-        <Link to="/track">
-          <ListGroupItem key={name + index}>
-            {name}
-            {addButton ? (
-              <button className="btn-xs btn btn-primary pull-right">+</button>
-            ) : null}
-          </ListGroupItem>
-        </Link>
+        <ListGroupItem key={name + index} onClick={props.getData}>
+          {name}
+          {addButton ? (
+            <button className="btn-xs btn btn-primary pull-right">+</button>
+          ) : null}
+        </ListGroupItem>
       </div>
     );
   });
@@ -67,10 +73,13 @@ class HomePage extends React.Component {
 
     this.handleToggle = this.handleToggle.bind(this);
     this.handleLogout = this.handleLogout.bind(this);
+    this.handleAlbumTracks = this.handleAlbumTracks.bind(this);
+    this.handleArtistAlbums = this.handleArtistAlbums.bind(this);
     this.state = {
       activeTab: '1'
     };
   }
+
   componentDidMount() {
     const { dispatch } = this.props;
     this.props.clearData();
@@ -86,9 +95,21 @@ class HomePage extends React.Component {
   handleLogout() {
     this.props.logout();
   }
+  handleAlbumTracks() {
+    this.props.loadAlbumTracks();
+  }
+  handleArtistAlbums() {
+    this.props.loadArtistAlbums();
+  }
 
   render() {
-    const { authentication, allArtist, allAlbum, allTrack } = this.props;
+    const {
+      authentication,
+      allArtist,
+      allAlbum,
+      allTrack,
+      allAlbumTracks
+    } = this.props;
     return (
       <div id={styles.homePage}>
         <div className="text-right">
@@ -164,7 +185,14 @@ class HomePage extends React.Component {
                 ) : (
                   ''
                 )}
-                {allArtist ? <DataList names={allArtist} /> : ''}
+                {allArtist ? (
+                  <DataList
+                    names={allArtist}
+                    getData={this.handleArtistAlbums}
+                  />
+                ) : (
+                  ''
+                )}
               </Col>
             </Row>
           </TabPane>
@@ -184,7 +212,15 @@ class HomePage extends React.Component {
                 ) : (
                   ''
                 )}
-                {allAlbum ? <DataList names={allAlbum} addButton={true} /> : ''}
+                {allAlbum ? (
+                  <DataList
+                    names={allAlbum}
+                    addButton={true}
+                    getData={this.handleAlbumTracks}
+                  />
+                ) : (
+                  ''
+                )}
               </Col>
             </Row>
           </TabPane>
@@ -228,12 +264,13 @@ class HomePage extends React.Component {
   }
 }
 function mapStateToProps(state) {
-  const { authentication, artist, album, track } = state;
+  const { authentication, artist, album, track, albumTracks } = state;
   return {
     authentication,
     allArtist: artist.allArtist,
     allAlbum: album.allAlbum,
-    allTrack: track.allTrack
+    allTrack: track.allTrack,
+    allAlbumTrack: albumTracks.allAlbumTrack
   };
 }
 
@@ -245,7 +282,6 @@ function mapDispatchToProps(dispatch) {
       this.loadArtists();
       this.loadTracks();
     },
-
     get loadAlbum() {
       return async () => {
         try {
@@ -273,6 +309,26 @@ function mapDispatchToProps(dispatch) {
           dispatch({ type: TRACK.SUCCESS, track });
         } catch (error) {
           dispatch({ type: TRACK.ERROR, message: error.message });
+        }
+      };
+    },
+    get loadAlbumTracks() {
+      return async () => {
+        try {
+          let albumTracks = await getAlbumTracks();
+          dispatch({ type: ALBUMTRACKS.SUCCESS, albumTracks });
+        } catch (error) {
+          dispatch({ type: ALBUMTRACKS.ERROR, message: error.message });
+        }
+      };
+    },
+    get loadArtistAlbums() {
+      return async () => {
+        try {
+          let artistAlbums = await getArtistAlbums();
+          dispatch({ type: ARTISTALBUM.SUCCESS, payload: artistAlbums });
+        } catch (error) {
+          dispatch({ type: ARTISTALBUM.ERROR, message: error.message });
         }
       };
     },
