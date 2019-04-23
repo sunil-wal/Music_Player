@@ -43,3 +43,12 @@ a:hover {
   background: #fff;
   color: #383d41;
 }
+
+.error-label {
+  background: #dc3545;
+  color: white;
+  padding: 2px 10px;
+  width: 100%;
+  margin-top: 2px;
+  border-radius: 3px;
+}

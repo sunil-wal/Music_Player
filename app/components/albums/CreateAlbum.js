@@ -5,26 +5,25 @@ import styles from './CreateAlbum.css';
 import routes from '../../constants/routes';
 
 class CreateAlbum extends Component {
-  state = {
-    name: '',
-    launchDate: '',
-    artistIds: [1]
-  };
-
   saveAlbum = e => {
     e.preventDefault();
-    this.props.createAlbum(this.state);
+    this.props.createAlbum(this.props.album);
   };
 
   changeHandler = e => {
     const name = e.target.name;
     const value = e.target.value;
 
-    this.setState({ [name]: value });
+    if (name === 'name') {
+      this.props.albumNameEdit(value);
+    } else {
+      this.props.albumLaunchDateEdit(value);
+    }
   };
 
   componentWillUnmount() {
     this.props.album.success = false;
+    this.props.resetAlbumForm();
   }
 
   render() {
@@ -47,9 +46,12 @@ class CreateAlbum extends Component {
                 type="text"
                 name="name"
                 id="album-name"
-                value={this.state.name}
+                value={this.props.album.name}
                 onChange={this.changeHandler}
               />
+              {this.props.album.error && (
+                <Label className="error-label">{this.props.album.error}</Label>
+              )}
             </FormGroup>
             <FormGroup>
               <Label for="album-launch-date">Launch Date</Label>
@@ -57,7 +59,7 @@ class CreateAlbum extends Component {
                 type="date"
                 name="launchDate"
                 id="album-launch-date"
-                value={this.state.launchDate}
+                value={this.props.album.launchDate}
                 onChange={this.changeHandler}
               />
             </FormGroup>
