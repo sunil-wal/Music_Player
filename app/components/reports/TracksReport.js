@@ -25,7 +25,7 @@ class TracksReport extends Component {
       labels: trackname,
       datasets: [
         {
-          label: 'Tracks Report',
+          label: 'Track in playlists',
           data: trackscore,
           backgroundColor: [
             'rgba(255,105,145,0.6)',
