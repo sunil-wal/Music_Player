@@ -29,7 +29,8 @@ import {
   ModalHeader,
   ModalBody,
   ModalFooter,
-  Container
+  Container,
+  UncontrolledAlert
 } from 'reactstrap';
 import classnames from 'classnames';
 import { userActions } from '../actions';
@@ -187,6 +188,16 @@ class HomePage extends React.Component {
           </Button>
         </div>
         <br />
+        {this.props.success ? (
+          <UncontrolledAlert color="success">
+            {this.props.success}
+          </UncontrolledAlert>
+        ) : null}
+        {this.props.error ? (
+          <UncontrolledAlert color="danger">
+            {this.props.error}
+          </UncontrolledAlert>
+        ) : null}
         <Nav tabs>
           <NavItem>
             <NavLink
@@ -362,12 +373,15 @@ function mapStateToProps(state) {
     updatePlaylists,
     modifyPlaylist,
     albumTracks,
-    artistAlbums
+    artistAlbums,
+    requestStatus
   } = state;
   console.log('albumTracks.tracksByAlbum', albumTracks.tracksByAlbum);
   console.log('artistAlbums.albumsByArtist', artistAlbums.albumsByArtist);
   return {
     authentication,
+    success: requestStatus.success,
+    error: requestStatus.error,
     allArtist: artist.allArtist,
     allAlbum: album.allAlbum,
     allPlaylists: updatePlaylists.allPlaylists,
@@ -383,7 +397,6 @@ function mapDispatchToProps(dispatch) {
   return {
     clearData: () => {},
     addSong: (id, type) => {
-      console.log(id);
       dispatch({
         type: 'ADDSONGBYID',
         payload: { id, openModal: true, type: type }
@@ -394,6 +407,8 @@ function mapDispatchToProps(dispatch) {
       this.loadArtists();
       this.loadTracks();
       this.loadPlaylists();
+      this.loadAllPlaylists();
+      this.loadAllTracks();
     },
     get loadAlbum() {
       return async () => {
@@ -422,6 +437,16 @@ function mapDispatchToProps(dispatch) {
           dispatch({ type: TRACK.SUCCESS, track });
         } catch (error) {
           dispatch({ type: TRACK.ERROR, message: error.message });
+        }
+      };
+    },
+    get loadAllTracks() {
+      return async () => {
+        try {
+          let track = await getTracks(0);
+          dispatch({ type: 'GETALLTRACKSSUCCESS', payload: track });
+        } catch (error) {
+          dispatch({ type: 'GETALLTRACKSERROR', message: error.message });
         }
       };
     },
@@ -460,6 +485,16 @@ function mapDispatchToProps(dispatch) {
           dispatch({ type: PLAYLIST.SUCCESS, playlists });
         } catch (error) {
           dispatch({ type: PLAYLIST.ERROR, message: error.message });
+        }
+      };
+    },
+    get loadAllPlaylists() {
+      return async () => {
+        try {
+          let playlists = await getPlaylists(0);
+          dispatch({ type: 'GETALLPLAYLISTSUCCESS', payload: playlists });
+        } catch (error) {
+          dispatch({ type: 'GETALLPLAYLISTERROR', message: error.message });
         }
       };
     },

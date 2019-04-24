@@ -104,9 +104,9 @@ class SelectPlaylist extends React.Component {
   }
 }
 function mapStateToProps(state) {
-  const { updatePlaylists, modifyPlaylist, tracksByAlbumId } = state;
+  const { allPlaylists, modifyPlaylist, tracksByAlbumId } = state;
   return {
-    allPlaylists: updatePlaylists.allPlaylists,
+    allPlaylists: allPlaylists.playlists,
     id: modifyPlaylist.id,
     modal: modifyPlaylist.openModal,
     type: modifyPlaylist.type,
@@ -123,13 +123,11 @@ function mapDispatchToProps(dispatch) {
     },
     get updatePlaylist() {
       return async (id, data) => {
-        console.log('id' + id);
-        console.log('data' + data);
         try {
           let album = await addTrackToPlaylist(id, data);
-          console.log('success');
+          dispatch({ type: 'SUCCESS', payload: 'Successfully Track Added' });
         } catch (error) {
-          console.log('err');
+          dispatch({ type: 'ERROR', payload: 'Opps! Track is not added' });
         }
       };
     },

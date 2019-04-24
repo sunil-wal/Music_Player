@@ -109,3 +109,21 @@ export const trackByPlaylistId = (
       return state;
   }
 };
+
+export const allTracks = (state = {}, action) => {
+  switch (action.type) {
+    case 'GETALLTRACKSSUCCESS':
+      return {
+        ...state,
+        tracks: action.payload
+      };
+    case 'GETALLTRACKSERROR':
+      return {
+        ...state,
+        message: action.message
+      };
+
+    default:
+      return state;
+  }
+};

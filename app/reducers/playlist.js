@@ -52,3 +52,26 @@ export const newPlaylists = (state = {}, action) => {
       return state;
   }
 };
+
+export const allPlaylists = (state = {}, action) => {
+  switch (action.type) {
+    case 'GETALLPLAYLISTSUCCESS':
+      const { message } = action;
+
+      return {
+        ...state,
+        playlists: action.payload
+      };
+
+    case 'GETALLPLAYLISTERROR':
+      // const { message } = action;
+
+      return {
+        ...state,
+        message: action.message
+      };
+
+    default:
+      return state;
+  }
+};
