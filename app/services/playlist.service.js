@@ -1,15 +1,17 @@
 import axios from './http.service';
-
-export const getPlaylists = async (page = 1, searchText = '') => {
+let user = JSON.parse(localStorage.getItem('user'));
+let userId;
+if (user && user.id) {
+  userId = user.id;
+}
+export const getPlaylists = async () => {
   let response = await axios({
-    url: '/playlists',
-    params: {
-      page,
-      searchText
-    }
+    url: `users/${userId}/playlists`
   });
-
-  return response.data.result;
+  const result = {
+    rows: response.data.result[0].userPlaylists
+  };
+  return result;
 };
 
 export const addTrackToPlaylist = async (id, data) => {

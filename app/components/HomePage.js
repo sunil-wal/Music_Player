@@ -116,7 +116,6 @@ function PlaylistTracks(props) {
   return (
     <div>
       <ListGroup>{listItems}</ListGroup>
-      <DataPagination itemsLength={names.count} name={names.name} />
     </div>
   );
 }
@@ -317,6 +316,9 @@ class HomePage extends React.Component {
                     <SearchPage name="tracks" />
                     <SelectValue />
                     <div className="text-right">
+                      <Link to="/tracksReport">
+                        <Button color="warning">Tracks Report</Button>
+                      </Link>
                       <Link to={routes.NEW_TRACK} className="btn btn-link">
                         <Button color="primary">Add Track</Button>
                       </Link>
@@ -491,7 +493,7 @@ function mapDispatchToProps(dispatch) {
     get loadAllPlaylists() {
       return async () => {
         try {
-          let playlists = await getPlaylists(0);
+          let playlists = await getPlaylists();
           dispatch({ type: 'GETALLPLAYLISTSUCCESS', payload: playlists });
         } catch (error) {
           dispatch({ type: 'GETALLPLAYLISTERROR', message: error.message });
