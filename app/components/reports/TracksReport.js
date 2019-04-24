@@ -7,7 +7,7 @@ import { Button } from 'reactstrap';
 import { getTrackReport } from '../../services';
 import styles from './PlaylistReport.css';
 
-class PlaylistReport extends Component {
+class TracksReport extends Component {
   constructor(props) {
     super(props);
 
@@ -104,4 +104,4 @@ function mapDispatchToProps(dispatch) {
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(PlaylistReport);
+)(TracksReport);

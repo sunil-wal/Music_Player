@@ -12,9 +12,8 @@ import CreatePlaylist from './containers/NewPlaylistPage';
 import PlaylistsPage from './containers/PlaylistsPage';
 import RegisterPage from './containers/RegisterPage';
 import Track from './components/Track';
-import ReportPlaylist from './containers/ReportPlaylist';
-// {isLoggedIn ? null : <Redirect to={routes.HOME} />}
-// <Route path={routes.HOME} component={HomePage} />
+import PlaylistReport from './components/reports/PlaylistReport';
+import TracksReport from './components/reports/TracksReport';
 class Routes extends Component {
   render() {
     const isLoggedIn = this.props.isLoggedIn;
@@ -38,7 +37,7 @@ class Routes extends Component {
                   <Route path={routes.NEW_ARTIST} component={NewArtistPage} />
                   <Route
                     path={routes.PLAYLIST_REPORT}
-                    component={ReportPlaylist}
+                    component={PlaylistReport}
                   />
                   <Route
                     path={routes.NEW_PLAYLIST}
@@ -50,6 +49,7 @@ class Routes extends Component {
                     component={TracksByPlaylistId}
                   />
                   <Route path={routes.PLAYLISTS} component={PlaylistsPage} />
+                  <Route path="/tracksReport" component={TracksReport} />
                 </Switch>
               </div>
             </React.Fragment>

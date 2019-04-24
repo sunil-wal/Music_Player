@@ -120,17 +120,17 @@ function mapDispatchToProps(dispatch) {
           dispatch({ type: TRACK.ERROR, message: error.message });
         }
       };
-    },
-    get loadPlaylists() {
-      return async offset => {
-        try {
-          let playlists = await getPlaylists(offset);
-          dispatch({ type: PLAYLIST.SUCCESS, playlists });
-        } catch (error) {
-          dispatch({ type: PLAYLIST.ERROR, message: error.message });
-        }
-      };
     }
+    // get loadPlaylists() {
+    //   return async offset => {
+    //     try {
+    //       let playlists = await getPlaylists(offset);
+    //       dispatch({ type: PLAYLIST.SUCCESS, playlists });
+    //     } catch (error) {
+    //       dispatch({ type: PLAYLIST.ERROR, message: error.message });
+    //     }
+    //   };
+    // }
   };
 }
 // export default DataPagination;
