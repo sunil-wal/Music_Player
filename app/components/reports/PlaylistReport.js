@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 
-import { HorizontalBar } from 'react-chartjs-2';
+import { Bar } from 'react-chartjs-2';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { Button } from 'reactstrap';
-import { getTrackReport } from '../../services';
+import { getArtistReport } from '../../services';
 import styles from './PlaylistReport.css';
 
 class PlaylistReport extends Component {
@@ -19,14 +19,26 @@ class PlaylistReport extends Component {
   }
 
   render() {
-    const { trackname, trackscore } = this.props;
+    const { artistname, artistTracksDuration, artistTracksCount } = this.props;
 
     const Data = {
-      labels: trackname,
+      labels: artistname,
       datasets: [
         {
-          label: 'Tracks Report',
-          data: trackscore,
+          label: 'Tracks Count',
+          data: artistTracksCount,
+          backgroundColor: [
+            'rgba(255,105,145,0.6)',
+            'rgba(155,100,210,0.6)',
+            'rgba(90,178,255,0.6)',
+            'rgba(240,134,67,0.6)',
+            'rgba(120,120,120,0.6)',
+            'rgba(250,55,197,0.6)'
+          ]
+        },
+        {
+          label: 'Tracks Duration',
+          data: artistTracksDuration,
           backgroundColor: [
             'rgba(255,105,145,0.6)',
             'rgba(155,100,210,0.6)',
@@ -46,7 +58,7 @@ class PlaylistReport extends Component {
             <i className="fas fa-arrow-left" />
           </Button>
         </Link>{' '}
-        <HorizontalBar
+        <Bar
           data={Data}
           options={{
             maintainAspectRatio: false
@@ -59,19 +71,24 @@ class PlaylistReport extends Component {
 
 function mapStateToProps(state) {
   const { allTrackReport } = state;
-  let trackname;
-  let trackscore;
+  let artistname;
+  let artistTracksDuration;
+  let artistTracksCount;
 
-  if (allTrackReport.tracksReport) {
-    trackname = allTrackReport.tracksReport.map(data => data.name);
-    trackscore = allTrackReport.tracksReport.map(
-      data => data.trackPlaylistsCount
+  if (allTrackReport.artistsReport) {
+    artistname = allTrackReport.artistsReport.map(data => data.name);
+    artistTracksDuration = allTrackReport.artistsReport.map(
+      data => data.artistTracksDuration
+    );
+    artistTracksCount = allTrackReport.artistsReport.map(
+      data => data.artistTracksCount
     );
   }
 
   return {
-    trackname,
-    trackscore
+    artistname,
+    artistTracksDuration,
+    artistTracksCount
   };
 }
 
@@ -84,10 +101,10 @@ function mapDispatchToProps(dispatch) {
     get getData() {
       return async () => {
         try {
-          const result = await getTrackReport();
+          const result = await getArtistReport();
 
           dispatch({
-            type: 'GETTRACKREPORTSUCCESS',
+            type: 'GETARTISTREPORTSUCCESS',
             payload: result
           });
         } catch (err) {

@@ -135,6 +135,11 @@ export const allTrackReport = (state = {}, action) => {
         ...state,
         tracksReport: action.payload
       };
+    case 'GETARTISTREPORTSUCCESS':
+      return {
+        ...state,
+        artistsReport: action.payload
+      };
     default:
       return state;
   }

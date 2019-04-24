@@ -256,6 +256,9 @@ class HomePage extends React.Component {
                     <br />
                     <SearchPage name="artists" />
                     <div className="text-right">
+                    <Link to={routes.PLAYLIST_REPORT}>
+                    <Button color="warning">Artists Report</Button>
+                  </Link>
                       <Link to={routes.NEW_ARTIST} className="btn btn-link">
                         <Button color="primary">Add Artist</Button>
                       </Link>
@@ -343,9 +346,6 @@ class HomePage extends React.Component {
             <Row>
               <Col sm="12">
                 <div className="text-right">
-                  <Link to={routes.PLAYLIST_REPORT}>
-                    <Button color="warning">Playlist Report</Button>
-                  </Link>
                   <Link to={routes.NEW_PLAYLIST} className="btn btn-link">
                     <Button color="primary">Add Playlist</Button>
                   </Link>

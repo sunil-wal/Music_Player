@@ -11,3 +11,11 @@ export const getArtists = async (page = 1, searchText = '') => {
 
   return response.data.artists;
 };
+
+export const getArtistReport = async () => {
+  let response = await axios({
+    url: `artists/report`
+  });
+
+  return response.data.result;
+};
