@@ -51,8 +51,12 @@ export const createAlbum = payload => dispatch => {
     )
     .then(json => {
       dispatch(createAlbumSuccess(json.data.success));
+      dispatch({ type: 'SUCCESS', payload: 'Successfully Album Created' });
     })
-    .catch(error => dispatch(createAlbumError(json.data.success)));
+    .catch(error => {
+      dispatch(createAlbumError(json.data.success));
+      dispatch({ type: 'ERROR', payload: 'Opps! Album is not created' });
+    });
 };
 
 export const getAlbumSuccess = album => {

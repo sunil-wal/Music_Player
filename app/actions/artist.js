@@ -35,8 +35,12 @@ export const createArtist = payload => dispatch => {
     )
     .then(json => {
       dispatch(createArtistSuccess(json.data.success));
+      dispatch({ type: 'SUCCESS', payload: 'Successfully Artist Created' });
     })
-    .catch(error => dispatch(createArtistError(json.data.success)));
+    .catch(error => {
+      dispatch(createArtistError(json.data.success));
+      dispatch({ type: 'ERROR', payload: 'Opps! Artist is not created' });
+    });
 };
 
 export const getArtistSuccess = artist => {

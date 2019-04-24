@@ -34,8 +34,12 @@ export const createTrack = payload => dispatch => {
     )
     .then(json => {
       dispatch(createTrackSuccess(json.data.success));
+      dispatch({ type: 'SUCCESS', payload: 'Successfully Track Created' });
     })
-    .catch(error => dispatch(createTrackError(json.data.success)));
+    .catch(error => {
+      dispatch(createTrackError(json.data.success));
+      dispatch({ type: 'ERROR', payload: 'Opps! Track is not created' });
+    });
 };
 
 export const getTrackSuccess = track => {

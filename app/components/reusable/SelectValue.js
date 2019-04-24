@@ -27,12 +27,11 @@ class SelectValue extends React.Component {
   }
 }
 function mapStateToProps(state) {
-  const { track } = state;
-  console.log(track);
+  const { allTracks } = state;
   let trackGenre;
   let key = [];
-  if (track.allTrack) {
-    trackGenre = track.allTrack.rows.reduce((result, data) => {
+  if (allTracks.tracks) {
+    trackGenre = allTracks.tracks.rows.reduce((result, data) => {
       if (key.indexOf(data.genre) >= 0) {
         return result;
       }

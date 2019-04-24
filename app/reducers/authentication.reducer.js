@@ -49,3 +49,24 @@ export function authentication(state = initialState, action) {
       };
   }
 }
+
+export function requestStatus(state = { success: '', error: '' }, action) {
+  switch (action.type) {
+    case 'SUCCESS':
+      return {
+        ...state,
+        success: action.payload
+        // error: ''
+      };
+    case 'ERROR':
+      return {
+        ...state,
+        error: action.payload
+        // success: ''
+      };
+    default:
+      return {
+        ...state
+      };
+  }
+}

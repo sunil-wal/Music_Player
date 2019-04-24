@@ -43,6 +43,10 @@ export const createPlaylist = payload => dispatch => {
     )
     .then(json => {
       dispatch(createPlaylistSuccess(json.data.message));
+      dispatch({ type: 'SUCCESS', payload: 'Successfully Playlist Created' });
     })
-    .catch(error => dispatch(createPlaylistError(error)));
+    .catch(error => {
+      dispatch(createPlaylistError(error));
+      dispatch({ type: 'ERROR', payload: 'Opps! Playlist is not created' });
+    });
 };

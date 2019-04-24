@@ -2,11 +2,11 @@
 import { combineReducers } from 'redux';
 import counter from './counter';
 import register from './register';
-import { authentication } from './authentication.reducer';
-import { updatePlaylists, newPlaylists } from './playlist';
+import { authentication, requestStatus } from './authentication.reducer';
+import { updatePlaylists, newPlaylists, allPlaylists } from './playlist';
 import { album, tracksByAlbumId } from './album';
 import artist from './artist';
-import { track, trackByPlaylistId } from './track';
+import { track, trackByPlaylistId, allTracks } from './track';
 import modifyPlaylist from './modifyPlaylist.reducer';
 import albumTracks from './albumTracks';
 import artistAlbums from './artistAlbums';
@@ -24,7 +24,10 @@ const rootReducer = combineReducers({
   trackByPlaylistId,
   tracksByAlbumId,
   albumTracks,
-  artistAlbums
+  artistAlbums,
+  allPlaylists,
+  allTracks,
+  requestStatus
 });
 
 export default rootReducer;
