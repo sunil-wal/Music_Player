@@ -35,3 +35,10 @@ export const getTracksByPlaylistId = async id => {
 
   return response.data.result[0].playlistTracks;
 };
+export const getTrackReport = async () => {
+  let response = await axios({
+    url: `tracks/report`
+  });
+
+  return response.data.result;
+};

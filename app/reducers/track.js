@@ -127,3 +127,15 @@ export const allTracks = (state = {}, action) => {
       return state;
   }
 };
+
+export const allTrackReport = (state = {}, action) => {
+  switch (action.type) {
+    case 'GETTRACKREPORTSUCCESS':
+      return {
+        ...state,
+        tracksReport: action.payload
+      };
+    default:
+      return state;
+  }
+};
