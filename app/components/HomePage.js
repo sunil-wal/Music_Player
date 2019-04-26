@@ -256,9 +256,9 @@ class HomePage extends React.Component {
                     <br />
                     <SearchPage name="artists" />
                     <div className="text-right">
-                    <Link to={routes.PLAYLIST_REPORT}>
-                    <Button color="warning">Artists Report</Button>
-                  </Link>
+                      <Link to={routes.PLAYLIST_REPORT}>
+                        <Button color="warning">Artists Report</Button>
+                      </Link>
                       <Link to={routes.NEW_ARTIST} className="btn btn-link">
                         <Button color="primary">Add Artist</Button>
                       </Link>
@@ -397,7 +397,10 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    clearData: () => {},
+    clearData: () => {
+      dispatch({ type: 'SUCCESS', payload: '' });
+      dispatch({ type: 'ERROR', payload: '' });
+    },
     addSong: (id, type) => {
       dispatch({
         type: 'ADDSONGBYID',
